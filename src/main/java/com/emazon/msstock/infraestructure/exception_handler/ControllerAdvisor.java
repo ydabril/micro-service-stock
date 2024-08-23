@@ -1,4 +1,4 @@
-package com.emazon.msstock.infraestructure.exceptionHandler;
+package com.emazon.msstock.infraestructure.exception_handler;
 
 import com.emazon.msstock.adapters.driven.jpa.mysql.exception.CategoryAlreadyExistsException;
 import com.emazon.msstock.infraestructure.Constants;

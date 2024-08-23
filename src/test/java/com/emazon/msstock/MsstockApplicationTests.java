@@ -1,9 +1,8 @@
 package com.emazon.msstock;
 
 import com.emazon.msstock.adapters.driving.http.controller.CategoryRestControllerAdapter;
-import com.emazon.msstock.adapters.driving.http.dto.request.AddCategoryRequest;
 import com.emazon.msstock.adapters.driving.http.mapper.ICategoryRequestMapper;
-import com.emazon.msstock.domain.api.useCase.CategoryUseCase;
+import com.emazon.msstock.domain.api.use_case.CategoryUseCase;
 import com.emazon.msstock.domain.model.Category;
 import com.emazon.msstock.domain.spi.ICategoryPersistencePort;
 import org.junit.jupiter.api.BeforeEach;
@@ -12,17 +11,10 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-
-import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
-import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @SpringBootTest
 class MsstockApplicationTests {
-
 	@Mock
 	private ICategoryPersistencePort categoryPersistencePort;
 
@@ -40,11 +32,6 @@ class MsstockApplicationTests {
 		MockitoAnnotations.openMocks(this);
 	}
 
-	// Test de contexto
-	@Test
-	void contextLoads() {
-	}
-
 	// Test de la lógica de negocio
 	@Test
 	void saveCategory_shouldCallPersistencePort() {
@@ -57,5 +44,4 @@ class MsstockApplicationTests {
 		// Assert
 		verify(categoryPersistencePort).saveCategory(category);
 	}
-
 }

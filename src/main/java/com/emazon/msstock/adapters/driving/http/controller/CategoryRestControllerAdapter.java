@@ -3,7 +3,6 @@ package com.emazon.msstock.adapters.driving.http.controller;
 import com.emazon.msstock.adapters.driving.http.dto.request.AddCategoryRequest;
 import com.emazon.msstock.adapters.driving.http.mapper.ICategoryRequestMapper;
 import com.emazon.msstock.domain.api.ICategoryServicePort;
-import com.emazon.msstock.domain.spi.ICategoryPersistencePort;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
