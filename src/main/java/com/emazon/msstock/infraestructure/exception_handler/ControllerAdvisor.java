@@ -1,6 +1,7 @@
 package com.emazon.msstock.infraestructure.exception_handler;
 
 import com.emazon.msstock.adapters.driven.jpa.mysql.exception.CategoryAlreadyExistsException;
+import com.emazon.msstock.adapters.driven.jpa.mysql.exception.NoDataFoundException;
 import com.emazon.msstock.infraestructure.Constants;
 import com.emazon.msstock.domain.exception.EmptyFieldException;
 import com.emazon.msstock.domain.exception.LengthFieldException;
@@ -33,5 +34,11 @@ public class ControllerAdvisor {
     public ResponseEntity<ExceptionResponse> handleSupplierAlreadyExistsException() {
         return ResponseEntity.badRequest().body(new ExceptionResponse(Constants.CATEGORY_ALREADY_EXISTS_EXCEPTION_MESSAGE,
                 HttpStatus.BAD_REQUEST.toString(), LocalDateTime.now()));
+    }
+
+    @ExceptionHandler(NoDataFoundException.class)
+    public ResponseEntity<ExceptionResponse> handleNoDataFoundException() {
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ExceptionResponse(
+                Constants.NO_DATA_FOUND_EXCEPTION_MESSAGE, HttpStatus.NOT_FOUND.toString(), LocalDateTime.now()));
     }
 }
