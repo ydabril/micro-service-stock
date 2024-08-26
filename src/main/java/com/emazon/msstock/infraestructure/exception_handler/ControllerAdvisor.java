@@ -1,8 +1,10 @@
 package com.emazon.msstock.infraestructure.exception_handler;
 
+import com.emazon.msstock.adapters.driven.jpa.mysql.exception.article_exception.ArticleAlreadyExistsException;
 import com.emazon.msstock.adapters.driven.jpa.mysql.exception.brand_exception.BrandAlreadyExistsException;
 import com.emazon.msstock.adapters.driven.jpa.mysql.exception.category_exception.CategoryAlreadyExistsException;
 import com.emazon.msstock.adapters.driven.jpa.mysql.exception.NoDataFoundException;
+import com.emazon.msstock.domain.exception.NegativeNotAllowedException;
 import com.emazon.msstock.infraestructure.Constants;
 import com.emazon.msstock.domain.exception.EmptyFieldException;
 import com.emazon.msstock.domain.exception.LengthFieldException;
@@ -25,6 +27,13 @@ public class ControllerAdvisor {
                 HttpStatus.BAD_REQUEST.toString(), LocalDateTime.now()));
     }
 
+    @ExceptionHandler(NegativeNotAllowedException.class)
+    public ResponseEntity<ExceptionResponse> handleNegativeNotAllowedException(NegativeNotAllowedException exception) {
+        return ResponseEntity.badRequest().body(new ExceptionResponse(
+                String.format(Constants.NEGATIVE_NOT_ALLOWED_EXCEPTION_MESSAGE, exception.getMessage()),
+                HttpStatus.BAD_REQUEST.toString(), LocalDateTime.now()));
+    }
+
     @ExceptionHandler(LengthFieldException.class)
     public ResponseEntity<ExceptionResponse> handleEmptyFieldException(LengthFieldException exception) {
         return ResponseEntity.badRequest().body(new ExceptionResponse(
@@ -40,6 +49,12 @@ public class ControllerAdvisor {
     @ExceptionHandler(BrandAlreadyExistsException.class)
     public ResponseEntity<ExceptionResponse> handleBrandAlreadyExistsException() {
         return ResponseEntity.badRequest().body(new ExceptionResponse(Constants.BRAND_ALREADY_EXISTS_EXCEPTION_MESSAGE,
+                HttpStatus.BAD_REQUEST.toString(), LocalDateTime.now()));
+    }
+
+    @ExceptionHandler(ArticleAlreadyExistsException.class)
+    public ResponseEntity<ExceptionResponse> handleArticleAlreadyExistsException() {
+        return ResponseEntity.badRequest().body(new ExceptionResponse(Constants.ARTICLE_ALREADY_EXISTS_EXCEPTION_MESSAGE,
                 HttpStatus.BAD_REQUEST.toString(), LocalDateTime.now()));
     }
 
