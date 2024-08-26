@@ -25,13 +25,4 @@ public class BrandRestControllerAdapter {
         brandServicePort.saveBrand(brandRequestMapper.addBrandRequest(request));
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
-
-    @GetMapping
-    public ResponseEntity<List<BrandResponse>> getAllBrands(@RequestParam Integer page,
-                                                                     @RequestParam Integer size,
-                                                                     @RequestParam(defaultValue = "asc") String sortDirection) {
-
-        return ResponseEntity.ok(brandResponseMapper.
-                toBrandResponseList(brandServicePort.getAllBrands(page, size, sortDirection)));
-    }
 }

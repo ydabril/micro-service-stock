@@ -27,15 +27,4 @@ public class BrandAdapter implements IBrandPersistencePort {
 
         brandRepository.save(brandEntityMapper.toEntity(brand));
     }
-
-    @Override
-    public List<Brand> getAllBrands(Integer page, Integer size, String sortDirection) {
-        Sort.Direction direction = Sort.Direction.fromString(sortDirection);
-        Pageable pagination = PageRequest.of(page, size, Sort.by(direction, Constants.categoryField.name.toString()));
-        List<BrandEntity> brands = brandRepository.findAll(pagination).getContent();
-        if (brands.isEmpty()) {
-            throw new NoDataFoundException();
-        }
-        return brandEntityMapper.toModelList(brands);
-    }
 }

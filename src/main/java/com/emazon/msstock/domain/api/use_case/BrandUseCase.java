@@ -15,9 +15,4 @@ public class BrandUseCase implements IBrandServicePort {
     public void saveBrand(Brand brand) {
         brandPersistencePort.saveBrand(brand);
     }
-
-    @Override
-    public List<Brand> getAllBrands(Integer page, Integer size, String sortDirection) {
-        return brandPersistencePort.getAllBrands(page, size, sortDirection);
-    }
 }
