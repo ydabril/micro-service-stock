@@ -1,7 +1,7 @@
 package com.emazon.msstock.adapters.driven.jpa.mysql.adapter;
 
 import com.emazon.msstock.adapters.driven.jpa.mysql.entity.CategoryEntity;
-import com.emazon.msstock.adapters.driven.jpa.mysql.exception.CategoryAlreadyExistsException;
+import com.emazon.msstock.adapters.driven.jpa.mysql.exception.category_exception.CategoryAlreadyExistsException;
 import com.emazon.msstock.adapters.driven.jpa.mysql.exception.NoDataFoundException;
 import com.emazon.msstock.adapters.driven.jpa.mysql.mapper.ICategoryEntityMapper;
 import com.emazon.msstock.adapters.driven.jpa.mysql.repository.ICategoryRepository;

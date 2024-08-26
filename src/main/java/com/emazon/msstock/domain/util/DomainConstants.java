@@ -12,4 +12,8 @@ public final class DomainConstants {
     public static final int MAXIMUM_LENGTH_NAME = 50;
 
     public static final int MAXIMUM_LENGTH_DESCRIPTION = 90;
+
+    public static final int MAXIMUM_LENGTH_NAME_BRAND = 50;
+
+    public static final int MAXIMUM_LENGTH_DESCRIPTION_BRAND = 120;
 }

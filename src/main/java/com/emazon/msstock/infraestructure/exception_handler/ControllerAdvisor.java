@@ -1,6 +1,7 @@
 package com.emazon.msstock.infraestructure.exception_handler;
 
-import com.emazon.msstock.adapters.driven.jpa.mysql.exception.CategoryAlreadyExistsException;
+import com.emazon.msstock.adapters.driven.jpa.mysql.exception.brand_exception.BrandAlreadyExistsException;
+import com.emazon.msstock.adapters.driven.jpa.mysql.exception.category_exception.CategoryAlreadyExistsException;
 import com.emazon.msstock.adapters.driven.jpa.mysql.exception.NoDataFoundException;
 import com.emazon.msstock.infraestructure.Constants;
 import com.emazon.msstock.domain.exception.EmptyFieldException;
@@ -31,8 +32,14 @@ public class ControllerAdvisor {
                 HttpStatus.BAD_REQUEST.toString(), LocalDateTime.now()));
     }
     @ExceptionHandler(CategoryAlreadyExistsException.class)
-    public ResponseEntity<ExceptionResponse> handleSupplierAlreadyExistsException() {
+    public ResponseEntity<ExceptionResponse> handleCategoryAlreadyExistsException() {
         return ResponseEntity.badRequest().body(new ExceptionResponse(Constants.CATEGORY_ALREADY_EXISTS_EXCEPTION_MESSAGE,
+                HttpStatus.BAD_REQUEST.toString(), LocalDateTime.now()));
+    }
+
+    @ExceptionHandler(BrandAlreadyExistsException.class)
+    public ResponseEntity<ExceptionResponse> handleBrandAlreadyExistsException() {
+        return ResponseEntity.badRequest().body(new ExceptionResponse(Constants.BRAND_ALREADY_EXISTS_EXCEPTION_MESSAGE,
                 HttpStatus.BAD_REQUEST.toString(), LocalDateTime.now()));
     }
 

@@ -5,4 +5,9 @@ public class Constants {
         name,
         description
     }
+
+    public enum brandField {
+        name,
+        description
+    }
 }
