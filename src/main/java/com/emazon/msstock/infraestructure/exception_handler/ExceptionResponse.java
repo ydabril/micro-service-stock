@@ -1,4 +1,4 @@
-package com.emazon.msstock.infraestructure.exceptionHandler;
+package com.emazon.msstock.infraestructure.exception_handler;
 
 import java.time.LocalDateTime;
 

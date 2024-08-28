@@ -4,7 +4,7 @@ import com.emazon.msstock.adapters.driven.jpa.mysql.adapter.CategoryAdapter;
 import com.emazon.msstock.adapters.driven.jpa.mysql.mapper.ICategoryEntityMapper;
 import com.emazon.msstock.adapters.driven.jpa.mysql.repository.ICategoryRepository;
 import com.emazon.msstock.domain.api.ICategoryServicePort;
-import com.emazon.msstock.domain.api.useCase.CategoryUseCase;
+import com.emazon.msstock.domain.api.use_case.CategoryUseCase;
 import com.emazon.msstock.domain.spi.ICategoryPersistencePort;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
