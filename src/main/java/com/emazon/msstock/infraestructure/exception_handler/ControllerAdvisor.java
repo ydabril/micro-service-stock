@@ -1,7 +1,7 @@
 package com.emazon.msstock.infraestructure.exception_handler;
 
-import com.emazon.msstock.adapters.driven.jpa.mysql.exception.CategoryAlreadyExistsException;
 import com.emazon.msstock.adapters.driven.jpa.mysql.exception.NoDataFoundException;
+import com.emazon.msstock.domain.exception.CategoryAlreadyExistsException;
 import com.emazon.msstock.infraestructure.Constants;
 import com.emazon.msstock.domain.exception.EmptyFieldException;
 import com.emazon.msstock.domain.exception.LengthFieldException;

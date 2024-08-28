@@ -1,7 +1,6 @@
 package com.emazon.msstock.adapters.driven.jpa.mysql.adapter;
 
 import com.emazon.msstock.adapters.driven.jpa.mysql.entity.CategoryEntity;
-import com.emazon.msstock.adapters.driven.jpa.mysql.exception.CategoryAlreadyExistsException;
 import com.emazon.msstock.adapters.driven.jpa.mysql.exception.NoDataFoundException;
 import com.emazon.msstock.adapters.driven.jpa.mysql.mapper.ICategoryEntityMapper;
 import com.emazon.msstock.adapters.driven.jpa.mysql.repository.ICategoryRepository;
@@ -15,16 +14,14 @@ import org.springframework.data.domain.Sort;
 
 import java.util.List;
 
+import java.util.Optional;
+
 @RequiredArgsConstructor
 public class CategoryAdapter implements ICategoryPersistencePort {
     private final ICategoryRepository categoryRepository;
     private final ICategoryEntityMapper categoryEntityMapper;
     @Override
     public void saveCategory(Category category) {
-        if (categoryRepository.findByName(category.getName()).isPresent()) {
-            throw new CategoryAlreadyExistsException();
-        }
-
         categoryRepository.save(categoryEntityMapper.toEntity(category));
     }
 
@@ -37,5 +34,11 @@ public class CategoryAdapter implements ICategoryPersistencePort {
             throw new NoDataFoundException();
         }
         return categoryEntityMapper.toModelList(categories);
+    }
+
+
+    @Override
+    public Optional<Category> findCategoryByName(String name) {
+        return categoryEntityMapper.toCategoryOptional(categoryRepository.findByName(name));
     }
 }
