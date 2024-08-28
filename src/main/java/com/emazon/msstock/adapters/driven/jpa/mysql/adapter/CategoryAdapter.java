@@ -39,12 +39,4 @@ public class CategoryAdapter implements ICategoryPersistencePort {
         }
         return categoryEntityMapper.toModelList(categories);
     }
-    @Override
-    public List<Category> findExistingCategories(List<Long> categoryIds) {
-        List<CategoryEntity> categories = categoryRepository.findAllById(categoryIds).stream()
-                .filter(category -> categoryIds.contains(category.getId()))
-                .collect(Collectors.toList());
-
-        return categoryEntityMapper.toModelList(categories);
-    }
 }
