@@ -59,6 +59,6 @@ public class BeanConfiguration {
 
     @Bean
     public IArticleServicePort articleServicePort() {
-        return new ArticleUseCase(articlePersistencePort());
+        return new ArticleUseCase(articlePersistencePort(), categoryPersistencePort());
     }
 }

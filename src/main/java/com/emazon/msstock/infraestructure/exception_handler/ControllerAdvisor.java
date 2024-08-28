@@ -4,10 +4,8 @@ import com.emazon.msstock.adapters.driven.jpa.mysql.exception.article_exception.
 import com.emazon.msstock.adapters.driven.jpa.mysql.exception.brand_exception.BrandAlreadyExistsException;
 import com.emazon.msstock.adapters.driven.jpa.mysql.exception.category_exception.CategoryAlreadyExistsException;
 import com.emazon.msstock.adapters.driven.jpa.mysql.exception.NoDataFoundException;
-import com.emazon.msstock.domain.exception.NegativeNotAllowedException;
+import com.emazon.msstock.domain.exception.*;
 import com.emazon.msstock.infraestructure.Constants;
-import com.emazon.msstock.domain.exception.EmptyFieldException;
-import com.emazon.msstock.domain.exception.LengthFieldException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -62,5 +60,19 @@ public class ControllerAdvisor {
     public ResponseEntity<ExceptionResponse> handleNoDataFoundException() {
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ExceptionResponse(
                 Constants.NO_DATA_FOUND_EXCEPTION_MESSAGE, HttpStatus.NOT_FOUND.toString(), LocalDateTime.now()));
+    }
+
+    @ExceptionHandler(DuplicateCategoryExceptiom.class)
+    public ResponseEntity<ExceptionResponse> handleDuplicateCategoryExceptiom(DuplicateCategoryExceptiom exception) {
+        return ResponseEntity.badRequest().body(new ExceptionResponse(
+                String.format(Constants.DUPLICATE_CATEGORY_EXCEPTION_MESSAGE),
+                HttpStatus.BAD_REQUEST.toString(), LocalDateTime.now()));
+    }
+
+    @ExceptionHandler(InvalidCategoryCountException.class)
+    public ResponseEntity<ExceptionResponse> handleInvalidCategoryCountException(InvalidCategoryCountException exception) {
+        return ResponseEntity.badRequest().body(new ExceptionResponse(
+                String.format(Constants.INVALID_CATEGORT_COUNT_EXCEPTION, exception.getMessage()),
+                HttpStatus.BAD_REQUEST.toString(), LocalDateTime.now()));
     }
 }

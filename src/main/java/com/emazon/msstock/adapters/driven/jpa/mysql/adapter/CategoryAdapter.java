@@ -14,6 +14,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 public class CategoryAdapter implements ICategoryPersistencePort {
@@ -36,6 +37,14 @@ public class CategoryAdapter implements ICategoryPersistencePort {
         if (categories.isEmpty()) {
             throw new NoDataFoundException();
         }
+        return categoryEntityMapper.toModelList(categories);
+    }
+    @Override
+    public List<Category> findExistingCategories(List<Long> categoryIds) {
+        List<CategoryEntity> categories = categoryRepository.findAllById(categoryIds).stream()
+                .filter(category -> categoryIds.contains(category.getId()))
+                .collect(Collectors.toList());
+
         return categoryEntityMapper.toModelList(categories);
     }
 }

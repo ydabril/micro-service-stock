@@ -7,9 +7,12 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 @Entity
-@Table(name = "caregory")
+@Table(name = "category")
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
@@ -20,4 +23,6 @@ public class CategoryEntity {
     private Long id;
     private String name;
     private String description;
+    @ManyToMany(mappedBy = "categories")
+    private List<ArticleEntity> articles;
 }

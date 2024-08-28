@@ -17,4 +17,8 @@ public class Constants {
     public static final String FIELD_LENGTH_EXCEPTION_MESSAGE = "the %s is too long";
 
     public static final String NEGATIVE_NOT_ALLOWED_EXCEPTION_MESSAGE = "Field %s can not receive negative values";
+
+    public static final String DUPLICATE_CATEGORY_EXCEPTION_MESSAGE = "Articles cannot have repeated categories";
+
+    public static final String INVALID_CATEGORT_COUNT_EXCEPTION = "Articles cannot have more than %s categories";
 }
