@@ -30,7 +30,14 @@ public class CategoryAdapter implements ICategoryPersistencePort {
         Pageable pagination = PageRequest.of(page, size, sort);
         Page<CategoryEntity> categories = categoryRepository.findAll(pagination);
 
-        return new Pagination<>(categoryEntityMapper.toModelList(categories.getContent()), categories.getNumber(), categories.getSize(), categories.getTotalElements(), categories.getTotalPages(), categories.hasNext(), categories.hasPrevious());
+        return new Pagination<>(
+                categoryEntityMapper.toModelList(categories.getContent()),
+                categories.getNumber(),
+                categories.getSize(),
+                categories.getTotalElements(),
+                categories.getTotalPages(), categories.hasNext(),
+                categories.hasPrevious()
+        );
     }
 
 
