@@ -5,12 +5,12 @@ import com.emazon.msstock.adapters.driving.http.dto.response.CategoryResponse;
 import com.emazon.msstock.adapters.driving.http.mapper.ICategoryRequestMapper;
 import com.emazon.msstock.adapters.driving.http.mapper.ICategoryResponseMapper;
 import com.emazon.msstock.domain.api.ICategoryServicePort;
+import com.emazon.msstock.domain.model.Category;
+import com.emazon.msstock.domain.model.Pagination;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RestController
 @RequestMapping("/category")
@@ -27,11 +27,12 @@ public class CategoryRestControllerAdapter {
     }
 
     @GetMapping
-    public ResponseEntity<List<CategoryResponse>> getAllCategories(@RequestParam Integer page,
-                                                                   @RequestParam Integer size,
-                                                                   @RequestParam(defaultValue = "asc") String sortDirection) {
+    public ResponseEntity<Pagination<CategoryResponse>> getAllCategories(@RequestParam Integer page,
+                                                                         @RequestParam Integer size,
+                                                                         @RequestParam(defaultValue = "asc") String sortDirection) {
 
+        Pagination<Category> categories = categoryServicePort.getAllCategories(page, size, sortDirection);
         return ResponseEntity.ok(categoryResponseMapper.
-                toCategoryResponseList(categoryServicePort.getAllCategories(page, size, sortDirection)));
+                toPaginationResponse(categories));
     }
 }

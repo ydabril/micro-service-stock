@@ -2,9 +2,12 @@ package com.emazon.msstock.adapters;
 
 import com.emazon.msstock.adapters.driving.http.controller.CategoryRestControllerAdapter;
 import com.emazon.msstock.adapters.driving.http.dto.request.AddCategoryRequest;
+import com.emazon.msstock.adapters.driving.http.dto.response.CategoryResponse;
 import com.emazon.msstock.adapters.driving.http.mapper.ICategoryRequestMapper;
+import com.emazon.msstock.adapters.driving.http.mapper.ICategoryResponseMapper;
 import com.emazon.msstock.domain.api.ICategoryServicePort;
 import com.emazon.msstock.domain.model.Category;
+import com.emazon.msstock.domain.model.Pagination;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -15,6 +18,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
+import java.util.List;
 import java.util.Objects;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -36,6 +40,9 @@ public class CategoryControllerTests {
     @MockBean
     private ICategoryRequestMapper categoryRequestMapper;
 
+    @MockBean
+    private ICategoryResponseMapper categoryResponseMapper;
+
     @Autowired
     private ObjectMapper objectMapper;
 
@@ -54,5 +61,38 @@ public class CategoryControllerTests {
 
         verify(categoryRequestMapper).addCategoryRequest(any(AddCategoryRequest.class));
         verify(categoryServicePort).saveCategory(any(Category.class));
+    }
+
+    @Test
+    public void testGetAllCategories() throws Exception {
+        Pagination<Category> pagination = new Pagination<>(
+                List.of(),
+                0,
+                10,
+                2,
+                1,
+                false,
+                false
+        );
+        when(categoryServicePort.getAllCategories(anyInt(), anyInt(), anyString())).thenReturn(pagination);
+
+        Pagination<CategoryResponse> paginationResponse = new Pagination<>(
+                List.of(),
+                0,
+                10,
+                2,
+                1,
+                false,
+                false
+        );
+        when(categoryResponseMapper.toPaginationResponse(pagination)).thenReturn(paginationResponse);
+
+        mockMvc.perform(get("/category")
+                        .param("page", "0")
+                        .param("size", "10")
+                        .param("sortDirection", "asc")
+                        .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON));
     }
 }
