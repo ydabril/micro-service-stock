@@ -9,7 +9,7 @@ import lombok.Setter;
 import javax.persistence.*;
 
 @Entity
-@Table(name = "caregory")
+@Table(name = "category")
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter

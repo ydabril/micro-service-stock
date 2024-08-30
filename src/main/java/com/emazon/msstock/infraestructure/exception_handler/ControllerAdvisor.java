@@ -1,11 +1,7 @@
 package com.emazon.msstock.infraestructure.exception_handler;
 
-import com.emazon.msstock.adapters.driven.jpa.mysql.exception.brand_exception.BrandAlreadyExistsException;
-import com.emazon.msstock.adapters.driven.jpa.mysql.exception.category_exception.CategoryAlreadyExistsException;
-import com.emazon.msstock.adapters.driven.jpa.mysql.exception.NoDataFoundException;
+import com.emazon.msstock.domain.exception.*;
 import com.emazon.msstock.infraestructure.Constants;
-import com.emazon.msstock.domain.exception.EmptyFieldException;
-import com.emazon.msstock.domain.exception.LengthFieldException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
