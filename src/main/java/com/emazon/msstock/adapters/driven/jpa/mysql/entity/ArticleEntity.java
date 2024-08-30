@@ -28,7 +28,7 @@ public class ArticleEntity {
     @ManyToOne
     @JoinColumn(name = "id_brand")
     private BrandEntity brand;
-    @ManyToMany(fetch = FetchType.LAZY, cascade = { CascadeType.PERSIST, CascadeType.MERGE })
+    @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(
             name = "article_category",
             joinColumns = @JoinColumn(name = "article_id"),

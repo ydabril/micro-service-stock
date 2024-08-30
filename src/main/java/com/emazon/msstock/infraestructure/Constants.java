@@ -21,4 +21,6 @@ public class Constants {
     public static final String DUPLICATE_CATEGORY_EXCEPTION_MESSAGE = "Articles cannot have repeated categories";
 
     public static final String INVALID_CATEGORT_COUNT_EXCEPTION = "Articles cannot have more than %s categories";
+
+    public static final String CATEGORY_NO_DATA_FOUND_EXCEPTION_MESSAGE = "Category entered does not exist";
 }

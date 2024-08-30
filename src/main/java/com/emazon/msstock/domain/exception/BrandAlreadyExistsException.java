@@ -1,4 +1,4 @@
-package com.emazon.msstock.adapters.driven.jpa.mysql.exception.brand_exception;
+package com.emazon.msstock.domain.exception;
 
 public class BrandAlreadyExistsException extends RuntimeException {
     public BrandAlreadyExistsException() {

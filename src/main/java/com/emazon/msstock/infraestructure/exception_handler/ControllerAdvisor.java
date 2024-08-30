@@ -1,9 +1,5 @@
 package com.emazon.msstock.infraestructure.exception_handler;
 
-import com.emazon.msstock.adapters.driven.jpa.mysql.exception.article_exception.ArticleAlreadyExistsException;
-import com.emazon.msstock.adapters.driven.jpa.mysql.exception.brand_exception.BrandAlreadyExistsException;
-import com.emazon.msstock.adapters.driven.jpa.mysql.exception.category_exception.CategoryAlreadyExistsException;
-import com.emazon.msstock.adapters.driven.jpa.mysql.exception.NoDataFoundException;
 import com.emazon.msstock.domain.exception.*;
 import com.emazon.msstock.infraestructure.Constants;
 import lombok.RequiredArgsConstructor;
@@ -41,6 +37,18 @@ public class ControllerAdvisor {
     @ExceptionHandler(CategoryAlreadyExistsException.class)
     public ResponseEntity<ExceptionResponse> handleCategoryAlreadyExistsException() {
         return ResponseEntity.badRequest().body(new ExceptionResponse(Constants.CATEGORY_ALREADY_EXISTS_EXCEPTION_MESSAGE,
+                HttpStatus.BAD_REQUEST.toString(), LocalDateTime.now()));
+    }
+
+    @ExceptionHandler(CategoryNoDataFoundException.class)
+    public ResponseEntity<ExceptionResponse> handleCategoryNoDataFoundException() {
+        return ResponseEntity.badRequest().body(new ExceptionResponse(Constants.CATEGORY_NO_DATA_FOUND_EXCEPTION_MESSAGE,
+                HttpStatus.BAD_REQUEST.toString(), LocalDateTime.now()));
+    }
+
+    @ExceptionHandler(BrandNoDataFoundException.class)
+    public ResponseEntity<ExceptionResponse> handleBrandNoDataFoundException() {
+        return ResponseEntity.badRequest().body(new ExceptionResponse(Constants.CATEGORY_NO_DATA_FOUND_EXCEPTION_MESSAGE,
                 HttpStatus.BAD_REQUEST.toString(), LocalDateTime.now()));
     }
 

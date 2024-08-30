@@ -18,12 +18,10 @@ public interface IArticleRequestMapper {
     @Mapping(source = "brandId", target = "brand.id")
     @Mapping(target = "brand.name", constant = "name")
     @Mapping(target = "brand.description", constant = "description")
-    @Mapping(source = "categoryIds", target = "categories")
+    @Mapping(target = "categories", ignore = true)
     Article addArticleRequest(AddArticleRequest addArticleRequest);
 
-    default List<Category> mapCategories(List<Long> categoryIds) {
-        return categoryIds.stream()
-                .map(id -> new Category(id, "name", "description"))
-                .collect(Collectors.toList());
+    default List<Category> articleToCategoryList(AddArticleRequest articleRequest) {
+        return articleRequest.getCategoryIds().stream().map(id -> new Category(id, null, null)).toList();
     }
 }

@@ -10,12 +10,15 @@ import com.emazon.msstock.adapters.driving.http.mapper.IBrandRequestMapper;
 import com.emazon.msstock.adapters.driving.http.mapper.IBrandResponseMapper;
 import com.emazon.msstock.domain.api.IArticleServicePort;
 import com.emazon.msstock.domain.api.IBrandServicePort;
+import com.emazon.msstock.domain.model.Article;
+import com.emazon.msstock.domain.model.Category;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Set;
 
 @RestController
 @RequestMapping("/article")
@@ -27,7 +30,10 @@ public class ArticleRestControllerAdapter {
 
     @PostMapping
     public ResponseEntity<Void> addArticle(@RequestBody AddArticleRequest request) {
-        articleServicePort.saveArticle(articleRequestMapper.addArticleRequest(request));
+        List<Category> categoryRequest = articleRequestMapper.articleToCategoryList(request);
+        Article article = articleRequestMapper.addArticleRequest(request);
+        article.setCategories(categoryRequest);
+        articleServicePort.saveArticle(article);
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
