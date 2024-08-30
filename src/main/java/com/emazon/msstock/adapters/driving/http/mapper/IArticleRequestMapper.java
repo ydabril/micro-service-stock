@@ -1,16 +1,12 @@
 package com.emazon.msstock.adapters.driving.http.mapper;
 
 import com.emazon.msstock.adapters.driving.http.dto.request.AddArticleRequest;
-import com.emazon.msstock.adapters.driving.http.dto.request.AddBrandRequest;
 import com.emazon.msstock.domain.model.Article;
-import com.emazon.msstock.domain.model.Brand;
 import com.emazon.msstock.domain.model.Category;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 
 import java.util.List;
-import java.util.Set;
-import java.util.stream.Collectors;
 
 @Mapper(componentModel = "spring")
 public interface IArticleRequestMapper {

@@ -1,15 +1,10 @@
 package com.emazon.msstock.adapters.driving.http.controller;
 
 import com.emazon.msstock.adapters.driving.http.dto.request.AddArticleRequest;
-import com.emazon.msstock.adapters.driving.http.dto.request.AddBrandRequest;
 import com.emazon.msstock.adapters.driving.http.dto.response.ArticleResponse;
-import com.emazon.msstock.adapters.driving.http.dto.response.BrandResponse;
 import com.emazon.msstock.adapters.driving.http.mapper.IArticleRequestMapper;
 import com.emazon.msstock.adapters.driving.http.mapper.IArticleResponseMapper;
-import com.emazon.msstock.adapters.driving.http.mapper.IBrandRequestMapper;
-import com.emazon.msstock.adapters.driving.http.mapper.IBrandResponseMapper;
 import com.emazon.msstock.domain.api.IArticleServicePort;
-import com.emazon.msstock.domain.api.IBrandServicePort;
 import com.emazon.msstock.domain.model.Article;
 import com.emazon.msstock.domain.model.Category;
 import lombok.RequiredArgsConstructor;
@@ -18,7 +13,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Set;
 
 @RestController
 @RequestMapping("/article")

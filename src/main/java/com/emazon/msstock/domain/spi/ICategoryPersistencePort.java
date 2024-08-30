@@ -3,7 +3,6 @@ package com.emazon.msstock.domain.spi;
 import com.emazon.msstock.domain.model.Category;
 import com.emazon.msstock.domain.model.Pagination;
 
-import java.util.List;
 import java.util.Optional;
 
 public interface ICategoryPersistencePort {

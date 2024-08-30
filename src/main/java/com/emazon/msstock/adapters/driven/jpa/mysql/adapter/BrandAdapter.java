@@ -5,7 +5,6 @@ import com.emazon.msstock.adapters.driven.jpa.mysql.mapper.IBrandEntityMapper;
 import com.emazon.msstock.adapters.driven.jpa.mysql.repository.IBrandRepository;
 import com.emazon.msstock.adapters.driven.jpa.mysql.util.Constants;
 import com.emazon.msstock.domain.model.Brand;
-import com.emazon.msstock.domain.model.Category;
 import com.emazon.msstock.domain.model.Pagination;
 import com.emazon.msstock.domain.spi.IBrandPersistencePort;
 import lombok.RequiredArgsConstructor;

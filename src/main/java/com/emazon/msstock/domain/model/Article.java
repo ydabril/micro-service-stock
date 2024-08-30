@@ -1,15 +1,7 @@
 package com.emazon.msstock.domain.model;
 
-import com.emazon.msstock.domain.exception.EmptyFieldException;
-import com.emazon.msstock.domain.exception.NegativeNotAllowedException;
-import com.emazon.msstock.domain.util.DomainConstants;
-
 import java.math.BigDecimal;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
-
-import static java.util.Objects.requireNonNull;
 
 public class Article {
     private final Long id;
