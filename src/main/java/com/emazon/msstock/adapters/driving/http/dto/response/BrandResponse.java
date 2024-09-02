@@ -8,4 +8,5 @@ import lombok.Getter;
 public class BrandResponse {
     private final Long id;
     private final String name;
+    private final String description;
 }

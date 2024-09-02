@@ -1,9 +1,8 @@
 package com.emazon.msstock.adapters.driving.http.mapper;
 
 import com.emazon.msstock.adapters.driving.http.dto.response.ArticleResponse;
-import com.emazon.msstock.adapters.driving.http.dto.response.BrandResponse;
 import com.emazon.msstock.domain.model.Article;
-import com.emazon.msstock.domain.model.Brand;
+import com.emazon.msstock.domain.model.Pagination;
 import org.mapstruct.Mapper;
 
 import java.util.List;
@@ -12,4 +11,5 @@ import java.util.List;
 public interface IArticleResponseMapper {
     ArticleResponse toArticleResponse(Article article);
     List<ArticleResponse> toArticleResponseList(List<Article> articles);
+    Pagination<ArticleResponse> toPaginationResponse(Pagination<Article> pagination);
 }

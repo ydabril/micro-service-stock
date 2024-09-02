@@ -1,9 +1,5 @@
 package com.emazon.msstock.infraestructure.exception_handler;
 
-import com.emazon.msstock.adapters.driven.jpa.mysql.exception.article_exception.ArticleAlreadyExistsException;
-import com.emazon.msstock.adapters.driven.jpa.mysql.exception.brand_exception.BrandAlreadyExistsException;
-import com.emazon.msstock.adapters.driven.jpa.mysql.exception.category_exception.CategoryAlreadyExistsException;
-import com.emazon.msstock.adapters.driven.jpa.mysql.exception.NoDataFoundException;
 import com.emazon.msstock.domain.exception.*;
 import com.emazon.msstock.infraestructure.Constants;
 import lombok.RequiredArgsConstructor;
@@ -12,7 +8,11 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
+import javax.validation.ConstraintViolation;
+import javax.validation.ConstraintViolationException;
 import java.time.LocalDateTime;
+import java.util.HashMap;
+import java.util.Map;
 
 @ControllerAdvice
 @RequiredArgsConstructor
@@ -41,6 +41,18 @@ public class ControllerAdvisor {
     @ExceptionHandler(CategoryAlreadyExistsException.class)
     public ResponseEntity<ExceptionResponse> handleCategoryAlreadyExistsException() {
         return ResponseEntity.badRequest().body(new ExceptionResponse(Constants.CATEGORY_ALREADY_EXISTS_EXCEPTION_MESSAGE,
+                HttpStatus.BAD_REQUEST.toString(), LocalDateTime.now()));
+    }
+
+    @ExceptionHandler(CategoryNoDataFoundException.class)
+    public ResponseEntity<ExceptionResponse> handleCategoryNoDataFoundException() {
+        return ResponseEntity.badRequest().body(new ExceptionResponse(Constants.CATEGORY_NO_DATA_FOUND_EXCEPTION_MESSAGE,
+                HttpStatus.BAD_REQUEST.toString(), LocalDateTime.now()));
+    }
+
+    @ExceptionHandler(BrandNoDataFoundException.class)
+    public ResponseEntity<ExceptionResponse> handleBrandNoDataFoundException() {
+        return ResponseEntity.badRequest().body(new ExceptionResponse(Constants.CATEGORY_NO_DATA_FOUND_EXCEPTION_MESSAGE,
                 HttpStatus.BAD_REQUEST.toString(), LocalDateTime.now()));
     }
 
@@ -74,5 +86,16 @@ public class ControllerAdvisor {
         return ResponseEntity.badRequest().body(new ExceptionResponse(
                 String.format(Constants.INVALID_CATEGORT_COUNT_EXCEPTION, exception.getMessage()),
                 HttpStatus.BAD_REQUEST.toString(), LocalDateTime.now()));
+    }
+
+    @ExceptionHandler(ConstraintViolationException.class)
+    public ResponseEntity<Map<String, String>> handleConstraintViolationException(ConstraintViolationException ex) {
+        Map<String, String> errors = new HashMap<>();
+        for (ConstraintViolation<?> violation : ex.getConstraintViolations()) {
+            String propertyPath = violation.getPropertyPath().toString();
+            String errorMessage = violation.getMessage();
+            errors.put(propertyPath, errorMessage);
+        }
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errors);
     }
 }

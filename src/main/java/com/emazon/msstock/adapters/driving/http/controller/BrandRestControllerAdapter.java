@@ -5,12 +5,12 @@ import com.emazon.msstock.adapters.driving.http.dto.response.BrandResponse;
 import com.emazon.msstock.adapters.driving.http.mapper.IBrandRequestMapper;
 import com.emazon.msstock.adapters.driving.http.mapper.IBrandResponseMapper;
 import com.emazon.msstock.domain.api.IBrandServicePort;
+import com.emazon.msstock.domain.model.Brand;
+import com.emazon.msstock.domain.model.Pagination;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RestController
 @RequestMapping("/brand")
@@ -27,11 +27,12 @@ public class BrandRestControllerAdapter {
     }
 
     @GetMapping
-    public ResponseEntity<List<BrandResponse>> getAllBrands(@RequestParam Integer page,
+    public ResponseEntity<Pagination<BrandResponse>> getAllBrands(@RequestParam Integer page,
                                                                      @RequestParam Integer size,
                                                                      @RequestParam(defaultValue = "asc") String sortDirection) {
 
+        Pagination<Brand> brands = brandServicePort.getAllBrands(page, size, sortDirection);
         return ResponseEntity.ok(brandResponseMapper.
-                toBrandResponseList(brandServicePort.getAllBrands(page, size, sortDirection)));
+                toPaginationResponse(brands));
     }
 }

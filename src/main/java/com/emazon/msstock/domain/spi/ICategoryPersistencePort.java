@@ -1,11 +1,14 @@
 package com.emazon.msstock.domain.spi;
 
-import com.emazon.msstock.adapters.driven.jpa.mysql.entity.CategoryEntity;
 import com.emazon.msstock.domain.model.Category;
+import com.emazon.msstock.domain.model.Pagination;
 
-import java.util.List;
+import java.util.Optional;
 
 public interface ICategoryPersistencePort {
     void saveCategory(Category category);
-    List<Category> getAllCategories(Integer page, Integer size, String sortDirection);
+    Pagination<Category> getAllCategories(Integer page, Integer size, String sortDirection);
+    Optional<Category> findCategoryByName(String name);
+    Optional<Category> findCategoryById(Long id);
+
 }
