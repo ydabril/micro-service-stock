@@ -134,5 +134,23 @@ public class CategoryUseCaseTests {
         assertFalse(result.getList().isEmpty());
         assertEquals("Category1", result.getList().get(0).getName());
     }
+
+    @Test
+    public void testGetAllCategoriesNoData() {
+        Pagination<Category> pagination = new Pagination<>(
+                Collections.emptyList(),
+                0,
+                10,
+                1,
+                1,
+                false,
+                false
+        );
+        when(persistencePort.getAllCategories(anyInt(), anyInt(), anyString())).thenReturn(pagination);
+
+        assertThrows(NoDataFoundException.class, () -> {
+            categoryUseCase.getAllCategories(0, 10, "ASC");
+        });
+    }
 }
 

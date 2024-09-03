@@ -4,6 +4,7 @@ import com.emazon.msstock.domain.api.use_case.BrandUseCase;
 import com.emazon.msstock.domain.exception.BrandAlreadyExistsException;
 import com.emazon.msstock.domain.exception.EmptyFieldException;
 import com.emazon.msstock.domain.exception.LengthFieldException;
+import com.emazon.msstock.domain.exception.NoDataFoundException;
 import com.emazon.msstock.domain.model.Brand;
 import com.emazon.msstock.domain.model.Pagination;
 import com.emazon.msstock.domain.spi.IBrandPersistencePort;
@@ -14,6 +15,7 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
 import java.util.Collections;
+import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -107,5 +109,22 @@ public class BrandUseCaseTests {
         assertNotNull(result);
         assertFalse(result.getList().isEmpty());
         assertEquals("brand1", result.getList().get(0).getName());
+    }
+
+    @Test
+    void testGetAllCategoriesNoData(){
+        Pagination<Brand> pagination = new Pagination<>(
+                List.of(),
+                0,
+                10,
+                2,
+                1,
+                false,
+                false
+        );
+        when(persistencePort.getAllBrands(anyInt(), anyInt(), anyString())).thenReturn(pagination);
+
+        assertThrows(NoDataFoundException.class,() ->
+                brandUseCase.getAllBrands(0, 10, "ASC"));
     }
 }

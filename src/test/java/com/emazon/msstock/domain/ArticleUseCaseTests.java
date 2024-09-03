@@ -3,9 +3,7 @@ package com.emazon.msstock.domain;
 import com.emazon.msstock.domain.api.IBrandServicePort;
 import com.emazon.msstock.domain.api.ICategoryServicePort;
 import com.emazon.msstock.domain.api.use_case.ArticleUseCase;
-import com.emazon.msstock.domain.exception.EmptyFieldException;
-import com.emazon.msstock.domain.exception.LengthFieldException;
-import com.emazon.msstock.domain.exception.NegativeNotAllowedException;
+import com.emazon.msstock.domain.exception.*;
 import com.emazon.msstock.domain.model.Article;
 import com.emazon.msstock.domain.model.Brand;
 import com.emazon.msstock.domain.model.Category;
@@ -91,6 +89,95 @@ public class ArticleUseCaseTests {
         Article article = new Article(1L, "name", BigDecimal.valueOf(10), Long.valueOf(1), new Brand(1L, "name", "description"), categories);
 
         assertThrows(EmptyFieldException.class, () -> {
+            articleUseCase.saveArticle(article);
+        });
+    }
+
+    @Test
+    void testSaveArticleWithDuplicateCategoriesShouldFail() {
+        List<Category> categories = new ArrayList<>();
+        categories.add(new Category(1L, "categoria1", "descripcion"));
+        categories.add(new Category(1L, "categoria2", "descripcion"));
+        when(categoryPersistencePort.findCategoryById(1L)).thenReturn(Optional.of(new Category(1L, "categoria1", "descripcion")));
+
+        Brand brand = new Brand(1L, "name", "description");
+        when(brandPersistencePort.findBrandById(1L)).thenReturn(Optional.of(brand));
+
+        Article article = new Article(1L, "name", BigDecimal.valueOf(10), Long.valueOf(1), brand, categories);
+
+        assertThrows(DuplicateCategoryExceptiom.class, () -> {
+            articleUseCase.saveArticle(article);
+        });
+    }
+
+    @Test
+    void testSaveArticleWithInvalidCategoryCountShouldFail() {
+        List<Category> categories = new ArrayList<>();
+        categories.add(new Category(1L, "categoria1", "descripcion"));
+        categories.add(new Category(2L, "categoria2", "descripcion"));
+        categories.add(new Category(3L, "categoria3", "descripcion"));
+        categories.add(new Category(4L, "categoria4", "descripcion"));
+        when(categoryPersistencePort.findCategoryById(1L)).thenReturn(Optional.of(new Category(1L, "categoria1", "descripcion")));
+        when(categoryPersistencePort.findCategoryById(2L)).thenReturn(Optional.of(new Category(2L, "categoria2", "descripcion")));
+        when(categoryPersistencePort.findCategoryById(3L)).thenReturn(Optional.of(new Category(3L, "categoria3", "descripcion")));
+        when(categoryPersistencePort.findCategoryById(4L)).thenReturn(Optional.of(new Category(4L, "categoria4", "descripcion")));
+
+        Brand brand = new Brand(1L, "name", "description");
+        when(brandPersistencePort.findBrandById(1L)).thenReturn(Optional.of(brand));
+
+        Article article = new Article(1L, "name", BigDecimal.valueOf(10), Long.valueOf(1), brand, categories);
+
+        assertThrows(InvalidCategoryCountException.class, () -> {
+            articleUseCase.saveArticle(article);
+        });
+    }
+
+    @Test
+    void testSaveArticleWithNoDataFoundCategoriesShouldFail() {
+        List<Category> categories = new ArrayList<>();
+        categories.add(new Category(1L, "categoria1", "descripcion"));
+
+        Brand brand = new Brand(1L, "name", "description");
+        when(brandPersistencePort.findBrandById(1L)).thenReturn(Optional.of(brand));
+
+        Article article = new Article(1L, "name", BigDecimal.valueOf(10), Long.valueOf(1), brand, categories);
+
+        assertThrows(CategoryNoDataFoundException.class, () -> {
+            articleUseCase.saveArticle(article);
+        });
+    }
+
+    @Test
+    void testSaveArticleWithNoDataFoundBrandsShouldFail() {
+        List<Category> categories = new ArrayList<>();
+        categories.add(new Category(1L, "categoria1", "descripcion"));
+        categories.add(new Category(1L, "categoria2", "descripcion"));
+        when(categoryPersistencePort.findCategoryById(1L)).thenReturn(Optional.of(new Category(1L, "categoria1", "descripcion")));
+
+        Brand brand = new Brand(1L, "name", "description");
+
+        Article article = new Article(1L, "name", BigDecimal.valueOf(10), Long.valueOf(1), brand, categories);
+
+        assertThrows(BrandNoDataFoundException.class, () -> {
+            articleUseCase.saveArticle(article);
+        });
+    }
+
+    @Test
+    void testSaveArticleAlreadyExistsShouldFail() {
+        List<Category> categories = new ArrayList<>();
+        categories.add(new Category(1L, "categoria1", "descripcion"));
+        when(categoryPersistencePort.findCategoryById(1L)).thenReturn(Optional.of(new Category(1L, "categoria1", "descripcion")));
+
+        Brand brand = new Brand(1L, "name", "description");
+        when(brandPersistencePort.findBrandById(1L)).thenReturn(Optional.of(brand));
+
+        Article article = new Article(1L, "name", BigDecimal.valueOf(10), Long.valueOf(1), brand, categories);
+
+        when(articlePersistencePort.findArticleByName(article.getName()))
+                .thenReturn(Optional.of(article));
+
+        assertThrows(ArticleAlreadyExistsException.class, () -> {
             articleUseCase.saveArticle(article);
         });
     }
