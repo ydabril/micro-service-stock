@@ -45,4 +45,9 @@ public class BrandAdapter implements IBrandPersistencePort {
     public Optional<Brand> findBrandByName(String name) {
         return brandEntityMapper.toBrandOptional(brandRepository.findByName(name));
     }
+
+    @Override
+    public Optional<Brand> findBrandById(Long id) {
+        return brandEntityMapper.toBrandOptional(brandRepository.findById(id));
+    }
 }

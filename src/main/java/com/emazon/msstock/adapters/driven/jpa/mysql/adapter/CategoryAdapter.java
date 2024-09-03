@@ -40,9 +40,12 @@ public class CategoryAdapter implements ICategoryPersistencePort {
         );
     }
 
-
     @Override
     public Optional<Category> findCategoryByName(String name) {
         return categoryEntityMapper.toCategoryOptional(categoryRepository.findByName(name));
+    }
+
+    public Optional<Category> findCategoryById(Long id) {
+        return categoryEntityMapper.toCategoryOptional(categoryRepository.findById(id));
     }
 }

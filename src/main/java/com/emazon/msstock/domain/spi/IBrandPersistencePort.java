@@ -11,4 +11,5 @@ public interface IBrandPersistencePort {
     Pagination<Brand> getAllBrands(Integer page, Integer size, String sortDirection);
 
     public Optional<Brand> findBrandByName(String name);
+    Optional<Brand> findBrandById(Long id);
 }

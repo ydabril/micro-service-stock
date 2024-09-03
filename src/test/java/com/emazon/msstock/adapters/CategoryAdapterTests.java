@@ -78,8 +78,8 @@ class CategoryAdapterTests {
         int size = 2;
         String sortDirection = Constants.SORT_DIRECTION_ASC;
 
-        CategoryEntity entity1 = new CategoryEntity(1L, "Category 1", "Description 1");
-        CategoryEntity entity2 = new CategoryEntity(2L, "Category 2", "Description 2");
+        CategoryEntity entity1 = new CategoryEntity();
+        CategoryEntity entity2 = new CategoryEntity();
         List<CategoryEntity> entities = Arrays.asList(entity1, entity2);
 
         Page<CategoryEntity> categoryPage = new PageImpl<>(entities, PageRequest.of(page, size, Sort.by("name").ascending()), entities.size());

@@ -21,6 +21,13 @@ public class ControllerAdvisor {
                 HttpStatus.BAD_REQUEST.toString(), LocalDateTime.now()));
     }
 
+    @ExceptionHandler(NegativeNotAllowedException.class)
+    public ResponseEntity<ExceptionResponse> handleNegativeNotAllowedException(NegativeNotAllowedException exception) {
+        return ResponseEntity.badRequest().body(new ExceptionResponse(
+                String.format(Constants.NEGATIVE_NOT_ALLOWED_EXCEPTION_MESSAGE, exception.getMessage()),
+                HttpStatus.BAD_REQUEST.toString(), LocalDateTime.now()));
+    }
+
     @ExceptionHandler(LengthFieldException.class)
     public ResponseEntity<ExceptionResponse> handleEmptyFieldException(LengthFieldException exception) {
         return ResponseEntity.badRequest().body(new ExceptionResponse(
@@ -33,9 +40,27 @@ public class ControllerAdvisor {
                 HttpStatus.BAD_REQUEST.toString(), LocalDateTime.now()));
     }
 
+    @ExceptionHandler(CategoryNoDataFoundException.class)
+    public ResponseEntity<ExceptionResponse> handleCategoryNoDataFoundException() {
+        return ResponseEntity.badRequest().body(new ExceptionResponse(Constants.CATEGORY_NO_DATA_FOUND_EXCEPTION_MESSAGE,
+                HttpStatus.BAD_REQUEST.toString(), LocalDateTime.now()));
+    }
+
+    @ExceptionHandler(BrandNoDataFoundException.class)
+    public ResponseEntity<ExceptionResponse> handleBrandNoDataFoundException() {
+        return ResponseEntity.badRequest().body(new ExceptionResponse(Constants.CATEGORY_NO_DATA_FOUND_EXCEPTION_MESSAGE,
+                HttpStatus.BAD_REQUEST.toString(), LocalDateTime.now()));
+    }
+
     @ExceptionHandler(BrandAlreadyExistsException.class)
     public ResponseEntity<ExceptionResponse> handleBrandAlreadyExistsException() {
         return ResponseEntity.badRequest().body(new ExceptionResponse(Constants.BRAND_ALREADY_EXISTS_EXCEPTION_MESSAGE,
+                HttpStatus.BAD_REQUEST.toString(), LocalDateTime.now()));
+    }
+
+    @ExceptionHandler(ArticleAlreadyExistsException.class)
+    public ResponseEntity<ExceptionResponse> handleArticleAlreadyExistsException() {
+        return ResponseEntity.badRequest().body(new ExceptionResponse(Constants.ARTICLE_ALREADY_EXISTS_EXCEPTION_MESSAGE,
                 HttpStatus.BAD_REQUEST.toString(), LocalDateTime.now()));
     }
 
@@ -43,5 +68,19 @@ public class ControllerAdvisor {
     public ResponseEntity<ExceptionResponse> handleNoDataFoundException() {
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ExceptionResponse(
                 Constants.NO_DATA_FOUND_EXCEPTION_MESSAGE, HttpStatus.NOT_FOUND.toString(), LocalDateTime.now()));
+    }
+
+    @ExceptionHandler(DuplicateCategoryExceptiom.class)
+    public ResponseEntity<ExceptionResponse> handleDuplicateCategoryExceptiom(DuplicateCategoryExceptiom exception) {
+        return ResponseEntity.badRequest().body(new ExceptionResponse(
+                String.format(Constants.DUPLICATE_CATEGORY_EXCEPTION_MESSAGE),
+                HttpStatus.BAD_REQUEST.toString(), LocalDateTime.now()));
+    }
+
+    @ExceptionHandler(InvalidCategoryCountException.class)
+    public ResponseEntity<ExceptionResponse> handleInvalidCategoryCountException(InvalidCategoryCountException exception) {
+        return ResponseEntity.badRequest().body(new ExceptionResponse(
+                String.format(Constants.INVALID_CATEGORT_COUNT_EXCEPTION, exception.getMessage()),
+                HttpStatus.BAD_REQUEST.toString(), LocalDateTime.now()));
     }
 }
