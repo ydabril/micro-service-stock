@@ -15,7 +15,7 @@ public interface IArticleEntityMapper {
     ArticleEntity toEntity(Article article);
     List<Article> toModelList(List<ArticleEntity> articleEntities);
 
-    default Optional<Article> toArtuckeOptional(Optional<ArticleEntity> articleEntityOptional) {
+    default Optional<Article> toArticleOptional(Optional<ArticleEntity> articleEntityOptional) {
         return articleEntityOptional.map(this::toModel);
     }
 }

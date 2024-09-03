@@ -2,11 +2,15 @@ package com.emazon.msstock.adapters;
 
 import com.emazon.msstock.adapters.driving.http.controller.ArticleRestControllerAdapter;
 import com.emazon.msstock.adapters.driving.http.dto.request.AddArticleRequest;
+import com.emazon.msstock.adapters.driving.http.dto.response.ArticleResponse;
+import com.emazon.msstock.adapters.driving.http.dto.response.CategoryResponse;
 import com.emazon.msstock.adapters.driving.http.mapper.IArticleRequestMapper;
 import com.emazon.msstock.adapters.driving.http.mapper.IArticleResponseMapper;
 import com.emazon.msstock.domain.api.IArticleServicePort;
 import com.emazon.msstock.domain.model.Article;
 import com.emazon.msstock.domain.model.Brand;
+import com.emazon.msstock.domain.model.Category;
+import com.emazon.msstock.domain.model.Pagination;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -19,6 +23,7 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.List;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
@@ -59,5 +64,39 @@ public class ArticleControllerTests {
 
         verify(iArticleRequestMapper).addArticleRequest(any(AddArticleRequest.class));
         verify(articleServicePort).saveArticle(any(Article.class));
+    }
+
+    @Test
+    public void testControllerFetchPaginatedArticlesShouldReturnCorrectPageData() throws Exception {
+        Pagination<Article> pagination = new Pagination<>(
+                List.of(),
+                0,
+                10,
+                2,
+                1,
+                false,
+                false
+        );
+        when(articleServicePort.getAllArticles(anyInt(), anyInt(), anyString(), anyString())).thenReturn(pagination);
+
+        Pagination<ArticleResponse> paginationResponse = new Pagination<>(
+                List.of(),
+                0,
+                10,
+                2,
+                1,
+                false,
+                false
+        );
+        when(iArticleResponseMapper.toPaginationResponse(pagination)).thenReturn(paginationResponse);
+
+        mockMvc.perform(get("/article")
+                        .param("page", "0")
+                        .param("size", "10")
+                        .param("sortDirection", "ASC")
+                        .param("sortBy", "ARTICLE_NAME")
+                        .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON));
     }
 }

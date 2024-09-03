@@ -49,7 +49,9 @@ public class CategoryUseCaseTests {
         String longName = "ThisCategoryNameIsWayTooLongAndShouldCauseAValidationError";
         String description = "Valid description";
 
-        assertThrows(LengthFieldException.class, () -> new Category(1L, longName, description));
+        assertThrows(LengthFieldException.class, () -> {
+            categoryUseCase.saveCategory(new Category(1L, longName, description));
+        });
     }
 
     @Test
@@ -57,7 +59,9 @@ public class CategoryUseCaseTests {
         String name = "ValidName";
         String longDescription = "This description is way too long and should cause a validation error because it exceeds the maximum length allowed by the application rules.";
 
-        assertThrows(LengthFieldException.class, () -> new Category(1L, name, longDescription));
+        assertThrows(LengthFieldException.class, () -> {
+            categoryUseCase.saveCategory(new Category(1L, name, longDescription));
+        });
     }
 
     @Test
@@ -65,7 +69,9 @@ public class CategoryUseCaseTests {
         String emptyName = "";
         String description = "Valid description";
 
-        assertThrows(EmptyFieldException.class, () -> new Category(1L, emptyName, description));
+        assertThrows(EmptyFieldException.class, () -> {
+            categoryUseCase.saveCategory(new Category(1L, emptyName, description));
+        });
     }
 
     @Test
@@ -73,8 +79,30 @@ public class CategoryUseCaseTests {
         String name = "ValidName";
         String emptyDescription = "";
 
-        assertThrows(EmptyFieldException.class, () -> new Category(1L, name, emptyDescription));
+        assertThrows(EmptyFieldException.class, () -> {
+            categoryUseCase.saveCategory(new Category(1L, name, emptyDescription));
+        });
     }
+    @Test
+    void testSaveCategoryWithNullNameShouldFail() {
+        String nullName = null;
+        String description = "Valid description";
+
+        assertThrows(EmptyFieldException.class, () -> {
+            categoryUseCase.saveCategory(new Category(1L, nullName, description));
+        });
+    }
+
+    @Test
+    void testSaveCategoryWithNullDescriptionShouldFail() {
+        String name = "ValidName";
+        String nullDescription = null;
+
+        assertThrows(EmptyFieldException.class, () -> {
+            categoryUseCase.saveCategory(new Category(1L, name, nullDescription));
+        });
+    }
+
 
     @Test
     void testSaveCategoryThatAlreadyExistsShouldFail() {

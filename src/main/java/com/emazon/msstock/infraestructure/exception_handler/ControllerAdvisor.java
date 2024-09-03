@@ -8,7 +8,11 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
+import javax.validation.ConstraintViolation;
+import javax.validation.ConstraintViolationException;
 import java.time.LocalDateTime;
+import java.util.HashMap;
+import java.util.Map;
 
 @ControllerAdvice
 @RequiredArgsConstructor
@@ -82,5 +86,16 @@ public class ControllerAdvisor {
         return ResponseEntity.badRequest().body(new ExceptionResponse(
                 String.format(Constants.INVALID_CATEGORT_COUNT_EXCEPTION, exception.getMessage()),
                 HttpStatus.BAD_REQUEST.toString(), LocalDateTime.now()));
+    }
+
+    @ExceptionHandler(ConstraintViolationException.class)
+    public ResponseEntity<Map<String, String>> handleConstraintViolationException(ConstraintViolationException ex) {
+        Map<String, String> errors = new HashMap<>();
+        for (ConstraintViolation<?> violation : ex.getConstraintViolations()) {
+            String propertyPath = violation.getPropertyPath().toString();
+            String errorMessage = violation.getMessage();
+            errors.put(propertyPath, errorMessage);
+        }
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errors);
     }
 }

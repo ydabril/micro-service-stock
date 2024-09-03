@@ -4,6 +4,7 @@ import com.emazon.msstock.domain.api.IArticleServicePort;
 import com.emazon.msstock.domain.exception.*;
 import com.emazon.msstock.domain.model.Article;
 import com.emazon.msstock.domain.model.Category;
+import com.emazon.msstock.domain.model.Pagination;
 import com.emazon.msstock.domain.spi.IArticlePersistencePort;
 import com.emazon.msstock.domain.spi.IBrandPersistencePort;
 import com.emazon.msstock.domain.spi.ICategoryPersistencePort;
@@ -29,9 +30,7 @@ public class ArticleUseCase implements IArticleServicePort {
             throw new ArticleAlreadyExistsException();
         }
 
-        if (article.getName().isEmpty()) {
-            throw new EmptyFieldException(DomainConstants.Field.NAME.toString());
-        }
+
         if (article.getPrice().compareTo(BigDecimal.ZERO) < 0) {
             throw new NegativeNotAllowedException(DomainConstants.FieldArticle.PRICE.toString());
         }
@@ -73,8 +72,8 @@ public class ArticleUseCase implements IArticleServicePort {
     }
 
     @Override
-    public  List<Article> getAllArticles() {
-        return articlePersistencePort.getAllArticles();
+    public Pagination<Article> getAllArticles(Integer page, Integer size, String sortBy, String sortDirection) {
+        return articlePersistencePort.getAllArticles(page, size, sortBy, sortDirection);
     }
 
     public void findExistingCategories(List<Long> categoriesIds) {
