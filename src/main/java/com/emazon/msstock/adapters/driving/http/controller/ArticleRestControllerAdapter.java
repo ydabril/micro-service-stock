@@ -18,6 +18,7 @@ import lombok.RequiredArgsConstructor;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -34,6 +35,7 @@ public class ArticleRestControllerAdapter {
     private final IArticleRequestMapper articleRequestMapper;
     private final IArticleResponseMapper articleResponseMapper;
 
+    @PreAuthorize("hasRole('ADMIN')")
     @Operation(summary = "Save an article", description = "Creates a new article in the system.")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "201", description = "Article successfully created"),

@@ -15,6 +15,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -25,6 +26,7 @@ public class BrandRestControllerAdapter {
     private final IBrandRequestMapper brandRequestMapper;
     private final IBrandResponseMapper brandResponseMapper;
 
+    @PreAuthorize("hasRole('ADMIN')")
     @Operation(summary = "Create a new brand", description = "This endpoint allows you to create a new brand.")
     @ApiResponse(responseCode = "201", description = "Brand created correctly.", content = @Content)
     @ApiResponse(responseCode = "400", description = "Incorrect brand creation request", content = {@Content(mediaType = "application/json", schema = @Schema(implementation = ExceptionResponse.class))})
