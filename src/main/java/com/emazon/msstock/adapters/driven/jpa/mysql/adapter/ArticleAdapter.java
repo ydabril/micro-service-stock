@@ -26,6 +26,11 @@ public class ArticleAdapter implements IArticlePersistencePort {
     }
 
     @Override
+    public void addSupplies(Article article) {
+        articleRepository.save(articleEntityMapper.toEntity(article));
+    }
+
+    @Override
     public Pagination<Article> getAllArticles(Integer page, Integer size, String sortBy, String sortDirection) {
         Sort sort;
         Page<ArticleEntity> articles = null;
@@ -73,5 +78,10 @@ public class ArticleAdapter implements IArticlePersistencePort {
     @Override
     public Optional<Article> findArticleByName(String name) {
         return articleEntityMapper.toArticleOptional(articleRepository.findByName(name));
+    }
+
+    @Override
+    public Optional<Article> findArticleById(Long id) {
+        return articleEntityMapper.toArticleOptional(articleRepository.findById(id));
     }
 }

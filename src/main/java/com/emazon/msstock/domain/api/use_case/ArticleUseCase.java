@@ -5,14 +5,18 @@ import com.emazon.msstock.domain.exception.*;
 import com.emazon.msstock.domain.model.Article;
 import com.emazon.msstock.domain.model.Category;
 import com.emazon.msstock.domain.model.Pagination;
+import com.emazon.msstock.domain.model.Supply;
 import com.emazon.msstock.domain.spi.IArticlePersistencePort;
 import com.emazon.msstock.domain.spi.IBrandPersistencePort;
 import com.emazon.msstock.domain.spi.ICategoryPersistencePort;
 import com.emazon.msstock.domain.util.DomainConstants;
 
+import javax.transaction.Transactional;
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.Map;
+import java.util.NoSuchElementException;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 public class ArticleUseCase implements IArticleServicePort {
@@ -74,6 +78,23 @@ public class ArticleUseCase implements IArticleServicePort {
     @Override
     public Pagination<Article> getAllArticles(Integer page, Integer size, String sortBy, String sortDirection) {
         return articlePersistencePort.getAllArticles(page, size, sortBy, sortDirection);
+    }
+
+    @Transactional
+    @Override
+    public void addSupplies(Supply supply) {
+        if (supply.getQuantity() <= 0) {
+            throw new NegativeNotAllowedException(DomainConstants.FieldArticle.QUANTITY.toString());
+        }
+
+        Article article = articlePersistencePort.findArticleById(supply.getArticleId())
+                .orElseThrow(ArticleNoDataFoundException::new);
+
+        long newQuantity = article.getQuantity() + supply.getQuantity();
+
+        article.setQuantity(newQuantity);
+
+        articlePersistencePort.addSupplies(article);
     }
 
     public void findExistingCategories(List<Long> categoriesIds) {

@@ -1,8 +1,10 @@
 package com.emazon.msstock.adapters.driving.http.mapper;
 
 import com.emazon.msstock.adapters.driving.http.dto.request.AddArticleRequest;
+import com.emazon.msstock.adapters.driving.http.dto.request.AddSuppliesRequest;
 import com.emazon.msstock.domain.model.Article;
 import com.emazon.msstock.domain.model.Category;
+import com.emazon.msstock.domain.model.Supply;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 
@@ -16,6 +18,7 @@ public interface IArticleRequestMapper {
     @Mapping(target = "brand.description", constant = "description")
     @Mapping(target = "categories", ignore = true)
     Article addArticleRequest(AddArticleRequest addArticleRequest);
+    Supply addSupplyRequest(AddSuppliesRequest addSuppliesRequest);
 
     default List<Category> articleToCategoryList(AddArticleRequest articleRequest) {
         return articleRequest.getCategoryIds().stream().map(id -> new Category(id, null, null)).toList();

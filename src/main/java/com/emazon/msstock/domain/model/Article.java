@@ -7,7 +7,7 @@ public class Article {
     private final Long id;
     private final String name;
     private final BigDecimal price;
-    private final Long quantity;
+    private Long quantity;
     private Brand brand;
     private List<Category> categories ;
 
@@ -22,6 +22,7 @@ public class Article {
         this.categories = categories;
     }
 
+
     public Long getId() {
         return id;
     }
@@ -34,6 +35,9 @@ public class Article {
         return price;
     }
 
+    public void setQuantity(Long quantity) {
+        this.quantity = quantity;
+    }
     public Long getQuantity() {
         return quantity;
     }

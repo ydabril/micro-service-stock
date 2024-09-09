@@ -118,4 +118,31 @@ public class ArticleAdapterTests {
         assertFalse(result.isHasNextPage());
         assertFalse(result.isHasPreviousPage());
     }
+
+    @Test
+    void AddSuppliesShouldSaveArticle() {
+        when(articleEntityMapper.toEntity(article)).thenReturn(articleEntity);
+
+        articleAdapter.addSupplies(article);
+
+        verify(iArticleRepository).save(articleEntity);
+    }
+
+    @Test
+    void testFindArticleById() {
+        Long id = 1L;
+        ArticleEntity articleEntity = new ArticleEntity();
+        articleEntity.setId(id);
+
+        when(iArticleRepository.findById(id)).thenReturn(Optional.of(articleEntity));
+        when(articleEntityMapper.toArticleOptional(Optional.of(articleEntity)))
+                .thenReturn(Optional.of(new Article(1L, "name", BigDecimal.ONE, Long.decode("1"), new Brand(1L, "name", "description"), new ArrayList<>())));
+
+        Optional<Article> result = articleAdapter.findArticleById(id);
+
+        assertTrue(result.isPresent());
+        assertEquals(id, result.get().getId());
+
+        verify(iArticleRepository).findById(id);
+    }
 }

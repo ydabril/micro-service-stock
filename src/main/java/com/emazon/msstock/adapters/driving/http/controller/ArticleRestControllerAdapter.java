@@ -1,6 +1,7 @@
 package com.emazon.msstock.adapters.driving.http.controller;
 
 import com.emazon.msstock.adapters.driving.http.dto.request.AddArticleRequest;
+import com.emazon.msstock.adapters.driving.http.dto.request.AddSuppliesRequest;
 import com.emazon.msstock.adapters.driving.http.dto.response.ArticleResponse;
 import com.emazon.msstock.adapters.driving.http.mapper.IArticleRequestMapper;
 import com.emazon.msstock.adapters.driving.http.mapper.IArticleResponseMapper;
@@ -22,6 +23,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.Pattern;
 import java.util.List;
@@ -75,5 +77,20 @@ public class ArticleRestControllerAdapter {
                 .toPaginationResponse(articleServicePort.getAllArticles(page, size, sortBy, sortDirection));
 
         return ResponseEntity.ok(articles);
+    }
+
+    @PreAuthorize("hasRole('AUX_BODEGA')")
+    @Operation(summary = "Add new supplies", description = "increases the amount of existing supplies.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "201", description = "supply successfully added"),
+            @ApiResponse(responseCode = "401", description = "unauthorized access"),
+            @ApiResponse(responseCode = "403", description = "access prohibited"),
+            @ApiResponse(responseCode = "400", description = "Bad request", content = @Content(schema = @Schema(implementation = String.class))),
+            @ApiResponse(responseCode = "500", description = "Internal server error", content = @Content(schema = @Schema(implementation = String.class)))
+    })
+    @PostMapping("/supply")
+    public ResponseEntity<Void> addSupplies(@Valid  @RequestBody AddSuppliesRequest request) {
+        articleServicePort.addSupplies(articleRequestMapper.addSupplyRequest(request));
+        return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 }

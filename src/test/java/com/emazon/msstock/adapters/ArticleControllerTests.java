@@ -2,23 +2,25 @@ package com.emazon.msstock.adapters;
 
 import com.emazon.msstock.adapters.driving.http.controller.ArticleRestControllerAdapter;
 import com.emazon.msstock.adapters.driving.http.dto.request.AddArticleRequest;
+import com.emazon.msstock.adapters.driving.http.dto.request.AddSuppliesRequest;
 import com.emazon.msstock.adapters.driving.http.dto.response.ArticleResponse;
 import com.emazon.msstock.adapters.driving.http.dto.response.CategoryResponse;
 import com.emazon.msstock.adapters.driving.http.mapper.IArticleRequestMapper;
 import com.emazon.msstock.adapters.driving.http.mapper.IArticleResponseMapper;
 import com.emazon.msstock.domain.api.IArticleServicePort;
-import com.emazon.msstock.domain.model.Article;
-import com.emazon.msstock.domain.model.Brand;
-import com.emazon.msstock.domain.model.Category;
-import com.emazon.msstock.domain.model.Pagination;
+import com.emazon.msstock.domain.model.*;
+import com.emazon.msstock.infraestructure.configuration.jwt.JwtAuthenticationFilter;
+import com.emazon.msstock.infraestructure.configuration.jwt.JwtService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.math.BigDecimal;
@@ -32,6 +34,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @WebMvcTest(controllers = ArticleRestControllerAdapter.class)
 @ExtendWith(MockitoExtension.class)
+@AutoConfigureMockMvc(addFilters = false)
 public class ArticleControllerTests {
     @Autowired
     private MockMvc mockMvc;
@@ -44,6 +47,12 @@ public class ArticleControllerTests {
 
     @MockBean
     private IArticleResponseMapper iArticleResponseMapper;
+
+    @MockBean
+    private JwtService jwtService;
+
+    @MockBean
+    private JwtAuthenticationFilter jwtAuthenticationFilter;
 
     @Autowired
     private ObjectMapper objectMapper;
@@ -64,6 +73,23 @@ public class ArticleControllerTests {
 
         verify(iArticleRequestMapper).addArticleRequest(any(AddArticleRequest.class));
         verify(articleServicePort).saveArticle(any(Article.class));
+    }
+
+    @Test
+    void addSuppliesControllerTest() throws Exception {
+        AddSuppliesRequest addSuppliesRequest = new AddSuppliesRequest(1L, 10L);
+        Supply supply = new Supply(1L, 10L);
+
+        when(iArticleRequestMapper.addSupplyRequest(any(AddSuppliesRequest.class))).thenReturn(supply);
+        doNothing().when(articleServicePort).addSupplies(any(Supply.class));
+
+        mockMvc.perform(post("/article/supply")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(addSuppliesRequest))
+        ).andExpect(status().isCreated());
+
+        verify(iArticleRequestMapper).addSupplyRequest(any(AddSuppliesRequest.class));
+        verify(articleServicePort).addSupplies(any(Supply.class));
     }
 
     @Test

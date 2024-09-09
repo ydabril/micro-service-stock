@@ -4,10 +4,7 @@ import com.emazon.msstock.domain.api.IBrandServicePort;
 import com.emazon.msstock.domain.api.ICategoryServicePort;
 import com.emazon.msstock.domain.api.use_case.ArticleUseCase;
 import com.emazon.msstock.domain.exception.*;
-import com.emazon.msstock.domain.model.Article;
-import com.emazon.msstock.domain.model.Brand;
-import com.emazon.msstock.domain.model.Category;
-import com.emazon.msstock.domain.model.Pagination;
+import com.emazon.msstock.domain.model.*;
 import com.emazon.msstock.domain.spi.IArticlePersistencePort;
 import com.emazon.msstock.domain.spi.IBrandPersistencePort;
 import com.emazon.msstock.domain.spi.ICategoryPersistencePort;
@@ -203,5 +200,66 @@ public class ArticleUseCaseTests {
         assertNotNull(result);
         assertFalse(result.getList().isEmpty());
         assertEquals("articleName", result.getList().get(0).getName());
+    }
+
+    @Test
+    void AddSuppliesSuccessTest(){
+        Category category = new Category(1L, "name", "description");
+        Brand brand = new Brand(1L, "name", "description");
+        when(brandPersistencePort.findBrandById(1L)).thenReturn(Optional.of(brand));
+
+        List<Category> categories = new ArrayList<>();
+        categories.add(category);
+
+        Article article = new Article(1L, "name", BigDecimal.ONE, Long.decode("1"), brand, categories );
+        article.setCategories(categories);
+
+        when(articlePersistencePort.findArticleById(1L)).thenReturn(Optional.of(article));
+
+        Supply supply = new Supply(1L, 10L);
+
+        articleUseCase.addSupplies(supply);
+
+        verify(articlePersistencePort, times(1)).addSupplies(any(Article.class));
+    }
+
+    @Test
+    void AddSuppliesWithArticleNoDataFoundExceptionTest(){
+        Category category = new Category(1L, "name", "description");
+        Brand brand = new Brand(1L, "name", "description");
+        when(brandPersistencePort.findBrandById(1L)).thenReturn(Optional.of(brand));
+
+        List<Category> categories = new ArrayList<>();
+        categories.add(category);
+
+        Article article = new Article(1L, "name", BigDecimal.ONE, Long.decode("1"), brand, categories );
+        article.setCategories(categories);
+
+        Supply supply = new Supply(1L, 10L);
+
+        assertThrows(ArticleNoDataFoundException.class, () -> {
+            articleUseCase.addSupplies(supply);
+        });
+    }
+
+    @Test
+    void AddSuppliesWithNegativeQuantityExceptionTest(){
+        Category category = new Category(1L, "name", "description");
+        Brand brand = new Brand(1L, "name", "description");
+        when(brandPersistencePort.findBrandById(1L)).thenReturn(Optional.of(brand));
+
+        List<Category> categories = new ArrayList<>();
+        categories.add(category);
+
+        Article article = new Article(1L, "name", BigDecimal.ONE, Long.decode("1"), brand, categories );
+        article.setCategories(categories);
+
+        when(articlePersistencePort.findArticleById(1L)).thenReturn(Optional.of(article));
+
+        Supply supply = new Supply(1L, -10L);
+
+        assertThrows(NegativeNotAllowedException.class, () -> {
+            articleUseCase.addSupplies(supply);
+        });
     }
 }

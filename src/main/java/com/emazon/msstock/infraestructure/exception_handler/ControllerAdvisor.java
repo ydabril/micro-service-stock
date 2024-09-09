@@ -5,6 +5,8 @@ import com.emazon.msstock.infraestructure.Constants;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.FieldError;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
@@ -17,6 +19,18 @@ import java.util.Map;
 @ControllerAdvice
 @RequiredArgsConstructor
 public class ControllerAdvisor {
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    public ResponseEntity<Map<String, String>> handleValidationExceptions(MethodArgumentNotValidException ex) {
+        Map<String, String> errors = new HashMap<>();
+
+        ex.getBindingResult().getAllErrors().forEach(error -> {
+            String fieldName = ((FieldError) error).getField();
+            String errorMessage = error.getDefaultMessage();
+            errors.put(fieldName, errorMessage);
+        });
+
+        return new ResponseEntity<>(errors, HttpStatus.BAD_REQUEST);
+    }
 
     @ExceptionHandler(EmptyFieldException.class)
     public ResponseEntity<ExceptionResponse> handleEmptyFieldException(EmptyFieldException exception) {
@@ -53,6 +67,12 @@ public class ControllerAdvisor {
     @ExceptionHandler(BrandNoDataFoundException.class)
     public ResponseEntity<ExceptionResponse> handleBrandNoDataFoundException() {
         return ResponseEntity.badRequest().body(new ExceptionResponse(Constants.CATEGORY_NO_DATA_FOUND_EXCEPTION_MESSAGE,
+                HttpStatus.BAD_REQUEST.toString(), LocalDateTime.now()));
+    }
+
+    @ExceptionHandler(ArticleNoDataFoundException.class)
+    public ResponseEntity<ExceptionResponse> handleArticleNoDataFoundException() {
+        return ResponseEntity.badRequest().body(new ExceptionResponse(Constants.ARTICLE_NO_DATA_FOUND_EXCEPTION_MESSAGE,
                 HttpStatus.BAD_REQUEST.toString(), LocalDateTime.now()));
     }
 

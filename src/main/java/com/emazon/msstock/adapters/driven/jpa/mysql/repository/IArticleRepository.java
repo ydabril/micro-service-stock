@@ -11,6 +11,7 @@ import java.util.Optional;
 
 public interface IArticleRepository extends JpaRepository<ArticleEntity, Long>  {
     Optional<ArticleEntity> findByName(String name);
+    Optional<ArticleEntity> findById(Long id);
 
     @Query(ConstantsQuerys.FIND_ALL_ORDER_BY_FIRST_CATEGORY_NAME_ASC)
     Page<ArticleEntity> findAllOrderByNumberOfCategoriesAsc(Pageable pageable);
