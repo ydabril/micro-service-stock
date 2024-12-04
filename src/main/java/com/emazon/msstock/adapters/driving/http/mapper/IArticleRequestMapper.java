@@ -2,6 +2,7 @@ package com.emazon.msstock.adapters.driving.http.mapper;
 
 import com.emazon.msstock.adapters.driving.http.dto.request.AddArticleRequest;
 import com.emazon.msstock.adapters.driving.http.dto.request.AddSuppliesRequest;
+import com.emazon.msstock.adapters.driving.http.dto.request.ArticleSubtract;
 import com.emazon.msstock.domain.model.Article;
 import com.emazon.msstock.domain.model.Category;
 import com.emazon.msstock.domain.model.Supply;

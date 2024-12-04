@@ -20,8 +20,10 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
+import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -59,20 +61,51 @@ public class ArticleControllerTests {
 
     @Test
     void saveArticleTest() throws Exception {
-        AddArticleRequest articleRequest = new AddArticleRequest("name", new BigDecimal(10), Long.decode("1"), Long.decode("1"), new ArrayList<>());
+        AddArticleRequest articleRequest = new AddArticleRequest(
+                "name",
+                "description",
+                new BigDecimal(10),
+                1L,
+                1L,
+                new ArrayList<>()
+        );
 
-        Article article = new Article(1L, "name", BigDecimal.ONE, Long.decode("1"), new Brand(1L, "name", "description"), new ArrayList<>() );
+        Article article = new Article(
+                1L,
+                "name",
+                "description",
+                BigDecimal.ONE,
+                1L,
+                new Brand(1L, "name", "description"),
+                new ArrayList<>(),
+                "image"
+        );
+
+        MockMultipartFile mockImage = new MockMultipartFile(
+                "image",
+                "test.jpg",
+                MediaType.IMAGE_JPEG_VALUE,
+                "imagen-falsa-contenido".getBytes()
+        );
+
+        MockMultipartFile mockArticleData = new MockMultipartFile(
+                "articleData",
+                "",
+                MediaType.APPLICATION_JSON_VALUE,
+                objectMapper.writeValueAsBytes(articleRequest)
+        );
 
         when(iArticleRequestMapper.addArticleRequest(any(AddArticleRequest.class))).thenReturn(article);
-        doNothing().when(articleServicePort).saveArticle(any(Article.class));
+        doNothing().when(articleServicePort).saveArticle(any(Article.class), any(MultipartFile.class));
 
-        mockMvc.perform(post("/article")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(articleRequest))
+        mockMvc.perform(multipart("/article")
+                .file(mockArticleData)
+                .file(mockImage)
+                .contentType(MediaType.MULTIPART_FORM_DATA_VALUE)
         ).andExpect(status().isCreated());
-
+        
         verify(iArticleRequestMapper).addArticleRequest(any(AddArticleRequest.class));
-        verify(articleServicePort).saveArticle(any(Article.class));
+        verify(articleServicePort).saveArticle(any(Article.class), any(MultipartFile.class));
     }
 
     @Test
@@ -83,7 +116,7 @@ public class ArticleControllerTests {
         when(iArticleRequestMapper.addSupplyRequest(any(AddSuppliesRequest.class))).thenReturn(supply);
         doNothing().when(articleServicePort).addSupplies(any(Supply.class));
 
-        mockMvc.perform(post("/article/supply")
+        mockMvc.perform(put("/article/update")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(addSuppliesRequest))
         ).andExpect(status().isCreated());
@@ -116,7 +149,7 @@ public class ArticleControllerTests {
         );
         when(iArticleResponseMapper.toPaginationResponse(pagination)).thenReturn(paginationResponse);
 
-        mockMvc.perform(get("/article")
+        mockMvc.perform(get("/article/all")
                         .param("page", "0")
                         .param("size", "10")
                         .param("sortDirection", "ASC")

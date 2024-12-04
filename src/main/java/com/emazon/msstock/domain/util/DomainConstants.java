@@ -28,6 +28,9 @@ public final class DomainConstants {
 
     public static final int MAXIMUM_COUNT_CATEGORY = 3;
 
+    public static final int MIN_QUANTITY= 0;
+
+
     public static final String FIELD_PRICE_NULL_MESSAGE = "Field 'price' cannot be null";
     public static final String FIELD_QUANTITY_NULL_MESSAGE = "Field 'quantity' cannot be null";
     public static final String FIELD_BRAND_NULL_MESSAGE = "Field 'brand' cannot be null";

@@ -8,11 +8,14 @@ import com.emazon.msstock.adapters.driving.http.mapper.ICategoryResponseMapper;
 import com.emazon.msstock.domain.api.ICategoryServicePort;
 import com.emazon.msstock.domain.model.Category;
 import com.emazon.msstock.domain.model.Pagination;
+import com.emazon.msstock.infraestructure.configuration.jwt.JwtAuthenticationFilter;
+import com.emazon.msstock.infraestructure.configuration.jwt.JwtService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
@@ -29,6 +32,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @WebMvcTest(controllers = CategoryRestControllerAdapter.class)
 @ExtendWith(MockitoExtension.class)
+@AutoConfigureMockMvc(addFilters = false)
 public class CategoryControllerTests {
 
     @Autowired
@@ -42,6 +46,12 @@ public class CategoryControllerTests {
 
     @MockBean
     private ICategoryResponseMapper categoryResponseMapper;
+
+    @MockBean
+    private JwtService jwtService;
+
+    @MockBean
+    private JwtAuthenticationFilter jwtAuthenticationFilter;
 
     @Autowired
     private ObjectMapper objectMapper;

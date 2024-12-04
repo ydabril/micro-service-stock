@@ -76,6 +76,12 @@ public class ControllerAdvisor {
                 HttpStatus.BAD_REQUEST.toString(), LocalDateTime.now()));
     }
 
+    @ExceptionHandler(OutOfStockException.class)
+    public ResponseEntity<ExceptionResponse> handleArticleNoStockException() {
+        return ResponseEntity.badRequest().body(new ExceptionResponse(Constants.ARTICLE_NO_STOCK,
+                HttpStatus.BAD_REQUEST.toString(), LocalDateTime.now()));
+    }
+
     @ExceptionHandler(BrandAlreadyExistsException.class)
     public ResponseEntity<ExceptionResponse> handleBrandAlreadyExistsException() {
         return ResponseEntity.badRequest().body(new ExceptionResponse(Constants.BRAND_ALREADY_EXISTS_EXCEPTION_MESSAGE,

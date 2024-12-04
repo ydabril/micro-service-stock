@@ -26,8 +26,7 @@ import java.util.Optional;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 public class ArticleAdapterTests {
     @Mock
@@ -45,7 +44,7 @@ public class ArticleAdapterTests {
     @BeforeEach
     void setUp() {
         MockitoAnnotations.openMocks(this);
-        article = new Article(1L, "name", BigDecimal.ONE, Long.decode("1"), new Brand(1L, "name", "description"), new ArrayList<>());
+        article = new Article(1L, "name", "description", BigDecimal.ONE, Long.decode("1"), new Brand(1L, "name", "description"), new ArrayList<>(), "image-path");
         article.setCategories(new ArrayList<>());
 
         articleEntity = new ArticleEntity();
@@ -68,7 +67,7 @@ public class ArticleAdapterTests {
 
         when(iArticleRepository.findByName(name)).thenReturn(Optional.of(articleEntity));
         when(articleEntityMapper.toArticleOptional(Optional.of(articleEntity)))
-                .thenReturn(Optional.of(new Article(1L, "name", BigDecimal.ONE, Long.decode("1"), new Brand(1L, "name", "description"), new ArrayList<>())));
+                .thenReturn(Optional.of(new Article(1L, "name", "description", BigDecimal.ONE, Long.decode("1"), new Brand(1L, "name", "description"), new ArrayList<>(), "image-path")));
 
         Optional<Article> result = articleAdapter.findArticleByName(name);
 
@@ -94,8 +93,8 @@ public class ArticleAdapterTests {
 
         when(iArticleRepository.findAll(any(PageRequest.class))).thenReturn(articlePage);
 
-        Article model1 = new Article(1L, "name", BigDecimal.ONE, Long.decode("1"), new Brand(1L, "name", "description"), new ArrayList<>());
-        Article model2 = new Article(2L, "name2", BigDecimal.ONE, Long.decode("1"), new Brand(2L, "name", "description"), new ArrayList<>());
+        Article model1 = new Article(1L, "name", "description", BigDecimal.ONE, Long.decode("1"), new Brand(1L, "name", "description"), new ArrayList<>(), "image-path");
+        Article model2 = new Article(2L, "name2", "description", BigDecimal.ONE, Long.decode("1"), new Brand(2L, "name", "description"), new ArrayList<>(), "image-path");
         List<Article> models = Arrays.asList(model1, model2);
 
         when(articleEntityMapper.toModel(any(ArticleEntity.class))).thenAnswer(invocation -> {
@@ -136,7 +135,7 @@ public class ArticleAdapterTests {
 
         when(iArticleRepository.findById(id)).thenReturn(Optional.of(articleEntity));
         when(articleEntityMapper.toArticleOptional(Optional.of(articleEntity)))
-                .thenReturn(Optional.of(new Article(1L, "name", BigDecimal.ONE, Long.decode("1"), new Brand(1L, "name", "description"), new ArrayList<>())));
+                .thenReturn(Optional.of(new Article(1L, "name", "description", BigDecimal.ONE, Long.decode("1"), new Brand(1L, "name", "description"), new ArrayList<>(), "image-path")));
 
         Optional<Article> result = articleAdapter.findArticleById(id);
 

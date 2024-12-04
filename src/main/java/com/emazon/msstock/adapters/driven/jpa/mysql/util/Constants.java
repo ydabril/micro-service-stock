@@ -7,6 +7,8 @@ public class Constants {
     public  static  final  String SORT_DIRECTION_DESC = "DESC";
     public  static  final String CATEGORIES = "CATEGORIES";
 
+    public static final String PARAM_ARTICLE_ID = "articleIds";
+
     public enum SortBy {
         ARTICLE_NAME("name"),
         BRAND_NAME("brand.name");

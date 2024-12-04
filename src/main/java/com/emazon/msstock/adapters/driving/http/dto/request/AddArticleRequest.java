@@ -10,6 +10,7 @@ import java.util.List;
 @Getter
 public class AddArticleRequest {
     private final String name;
+    private final String description;
     private final BigDecimal price;
     private final Long quantity;
     private final Long brandId;

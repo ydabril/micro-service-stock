@@ -15,4 +15,13 @@ public class ConstantsQuerys {
                     "JOIN a.categories c " +
                     "GROUP BY a.id " +
                     "ORDER BY MIN(c.name) DESC";
+
+    public static final String FIND_ARTICLES_CART_BY_CATEGORY_NAME =
+            "SELECT a FROM ArticleEntity a JOIN a.categories c WHERE c.name = :categoryName AND a.id IN :articleIds";
+
+    public static final String FIND_ARTICLES_CART_BY_BRAND_NAME =
+            "SELECT a FROM ArticleEntity a WHERE a.brand.name = :brandName AND a.id IN :articleIds";
+
+    public static final String FIND_ARTICLES_CART_BY_CATEGORY_BRAND_NAME =
+            "SELECT a FROM ArticleEntity a JOIN a.categories c WHERE a.brand.name = :brandName AND c.name = :categoryName AND a.id IN :articleIds";
 }

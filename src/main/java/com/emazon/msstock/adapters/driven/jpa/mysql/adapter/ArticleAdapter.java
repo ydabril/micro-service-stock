@@ -53,16 +53,13 @@ public class ArticleAdapter implements IArticlePersistencePort {
             }
 
             pagination = PageRequest.of(page, size, sort);
-
             articles = articleRepository.findAll(pagination);
-
         }
 
         List<Article> articlesList = articles.getContent().stream()
                 .map(articleEntityMapper::toModel)
                 .distinct()
                 .toList();
-
 
         return new Pagination<>(
                 articlesList,
@@ -73,6 +70,43 @@ public class ArticleAdapter implements IArticlePersistencePort {
                 articles.hasNext(),
                 articles.hasPrevious()
         );
+    }
+
+    @Override
+    public Pagination<Article> getArticlesCartById(Integer page, Integer size, String sortDirection, List<Long> articleIds, String categoryName, String brandName) {
+        Sort sort = Sort.by(Constants.NAME);
+        sort = sortDirection.equalsIgnoreCase(Constants.SORT_DIRECTION_ASC) ? sort.ascending() : sort.descending();
+
+        Pageable pagination = PageRequest.of(page, size, sort);
+        Page<ArticleEntity> articles = selectArticleQuery(articleIds, categoryName, brandName, pagination);
+
+        List<Article> articlesList = articles.getContent().stream()
+                .map(articleEntityMapper::toModel)
+                .distinct()
+                .toList();
+
+        return new Pagination<>(
+                articlesList,
+                articles.getNumber(),
+                articles.getSize(),
+                articles.getTotalElements(),
+                articles.getTotalPages(),
+                articles.hasNext(),
+                articles.hasPrevious()
+        );
+    }
+
+    private Page<ArticleEntity> selectArticleQuery(List<Long> articleIds, String categoryName, String brandName, Pageable pagination) {
+        if (categoryName != null && brandName != null) {
+            return articleRepository.findByCategoryNameAndBrandName(articleIds, categoryName, brandName, pagination);
+        }
+        if (categoryName != null) {
+            return articleRepository.findByCategoryName(articleIds, categoryName, pagination);
+        }
+        if (brandName != null) {
+            return articleRepository.findByBrandName(articleIds, brandName, pagination);
+        }
+        return articleRepository.findByIdIn(articleIds, pagination);
     }
 
     @Override

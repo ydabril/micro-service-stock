@@ -13,6 +13,7 @@ import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import org.springframework.mock.web.MockMultipartFile;
 
 import java.math.BigDecimal;
 import java.util.*;
@@ -53,29 +54,50 @@ public class ArticleUseCaseTests {
         List<Category> categories = new ArrayList<>();
         categories.add(category);
 
-        Article article = new Article(1L, "name", BigDecimal.ONE, Long.decode("1"), brand, categories );
+        Article article = new Article(1L, "name", "description", BigDecimal.ONE, Long.decode("1"), brand, categories, "image-path" );
         article.setCategories(categories);
 
-        articleUseCase.saveArticle(article);
+        MockMultipartFile mockFile = new MockMultipartFile(
+                "image",                         // Nombre del archivo
+                "test.jpg",                      // Nombre original del archivo
+                "image/jpeg",                    // Tipo de contenido
+                "fake-image-content".getBytes()  // Contenido en bytes
+        );
+
+        articleUseCase.saveArticle(article, mockFile);
 
         verify(articlePersistencePort, times(1)).saveArticle(any(Article.class));
     }
 
     @Test
     void testSaveArticleWithNegativePriceShouldFail() {
-        Article article = new Article(1L, "name", BigDecimal.valueOf(-1), Long.decode("1"), new Brand(1L, "name", "description"), new ArrayList<>());
+        Article article = new Article(1L, "name", "description", BigDecimal.valueOf(-1), Long.decode("1"), new Brand(1L, "name", "description"), new ArrayList<>(), "image-path" );
+
+        MockMultipartFile mockFile = new MockMultipartFile(
+                "image",
+                "test.jpg",
+                "image/jpeg",
+                "fake-image-content".getBytes()
+        );
 
         assertThrows(NegativeNotAllowedException.class, () -> {
-            articleUseCase.saveArticle(article);
+            articleUseCase.saveArticle(article, mockFile);
         });
     }
 
     @Test
     void testSaveArticleWithNegativeQuantityShouldFail() {
-        Article article = new Article(1L, "name", BigDecimal.valueOf(10), Long.valueOf(-1), new Brand(1L, "name", "description"), new ArrayList<>());
+        Article article = new Article(1L, "name", "description", BigDecimal.valueOf(10), Long.valueOf(-1), new Brand(1L, "name", "description"), new ArrayList<>(), "image-path");
+
+        MockMultipartFile mockFile = new MockMultipartFile(
+                "image",
+                "test.jpg",
+                "image/jpeg",
+                "fake-image-content".getBytes()
+        );
 
         assertThrows(NegativeNotAllowedException.class, () -> {
-            articleUseCase.saveArticle(article);
+            articleUseCase.saveArticle(article, mockFile);
         });
     }
 
@@ -83,10 +105,17 @@ public class ArticleUseCaseTests {
     void testSaveArticleWithEmptyCategoriesShouldFail() {
         List<Category> categories = new ArrayList<>();
         anyList().add(null);
-        Article article = new Article(1L, "name", BigDecimal.valueOf(10), Long.valueOf(1), new Brand(1L, "name", "description"), categories);
+        Article article = new Article(1L, "name", "description", BigDecimal.valueOf(10), Long.valueOf(1), new Brand(1L, "name", "description"), categories, "image-path");
+
+        MockMultipartFile mockFile = new MockMultipartFile(
+                "image",
+                "test.jpg",
+                "image/jpeg",
+                "fake-image-content".getBytes()
+        );
 
         assertThrows(EmptyFieldException.class, () -> {
-            articleUseCase.saveArticle(article);
+            articleUseCase.saveArticle(article, mockFile);
         });
     }
 
@@ -100,10 +129,19 @@ public class ArticleUseCaseTests {
         Brand brand = new Brand(1L, "name", "description");
         when(brandPersistencePort.findBrandById(1L)).thenReturn(Optional.of(brand));
 
-        Article article = new Article(1L, "name", BigDecimal.valueOf(10), Long.valueOf(1), brand, categories);
+        MockMultipartFile mockFile = new MockMultipartFile(
+                "image",
+                "test.jpg",
+                "image/jpeg",
+                "fake-image-content".getBytes()
+        );
+
+        Article article = new Article(1L, "name", "description", BigDecimal.valueOf(10), Long.valueOf(1), brand, categories, "image-path");
+
+
 
         assertThrows(DuplicateCategoryExceptiom.class, () -> {
-            articleUseCase.saveArticle(article);
+            articleUseCase.saveArticle(article, mockFile);
         });
     }
 
@@ -122,10 +160,18 @@ public class ArticleUseCaseTests {
         Brand brand = new Brand(1L, "name", "description");
         when(brandPersistencePort.findBrandById(1L)).thenReturn(Optional.of(brand));
 
-        Article article = new Article(1L, "name", BigDecimal.valueOf(10), Long.valueOf(1), brand, categories);
+        Article article = new Article(1L, "name", "description", BigDecimal.valueOf(10), Long.valueOf(1), brand, categories, "image-path");
+
+        MockMultipartFile mockFile = new MockMultipartFile(
+                "image",
+                "test.jpg",
+                "image/jpeg",
+                "fake-image-content".getBytes()
+        );
+
 
         assertThrows(InvalidCategoryCountException.class, () -> {
-            articleUseCase.saveArticle(article);
+            articleUseCase.saveArticle(article, mockFile);
         });
     }
 
@@ -137,10 +183,18 @@ public class ArticleUseCaseTests {
         Brand brand = new Brand(1L, "name", "description");
         when(brandPersistencePort.findBrandById(1L)).thenReturn(Optional.of(brand));
 
-        Article article = new Article(1L, "name", BigDecimal.valueOf(10), Long.valueOf(1), brand, categories);
+        Article article = new Article(1L, "name", "description", BigDecimal.valueOf(10), Long.valueOf(1), brand, categories, "image-path");
+
+        MockMultipartFile mockFile = new MockMultipartFile(
+                "image",
+                "test.jpg",
+                "image/jpeg",
+                "fake-image-content".getBytes()
+        );
+
 
         assertThrows(CategoryNoDataFoundException.class, () -> {
-            articleUseCase.saveArticle(article);
+            articleUseCase.saveArticle(article, mockFile);
         });
     }
 
@@ -153,10 +207,17 @@ public class ArticleUseCaseTests {
 
         Brand brand = new Brand(1L, "name", "description");
 
-        Article article = new Article(1L, "name", BigDecimal.valueOf(10), Long.valueOf(1), brand, categories);
+        Article article = new Article(1L, "name", "description", BigDecimal.valueOf(10), Long.valueOf(1), brand, categories, "image-path");
+
+        MockMultipartFile mockFile = new MockMultipartFile(
+                "image",
+                "test.jpg",
+                "image/jpeg",
+                "fake-image-content".getBytes()
+        );
 
         assertThrows(BrandNoDataFoundException.class, () -> {
-            articleUseCase.saveArticle(article);
+            articleUseCase.saveArticle(article, mockFile);
         });
     }
 
@@ -169,13 +230,20 @@ public class ArticleUseCaseTests {
         Brand brand = new Brand(1L, "name", "description");
         when(brandPersistencePort.findBrandById(1L)).thenReturn(Optional.of(brand));
 
-        Article article = new Article(1L, "name", BigDecimal.valueOf(10), Long.valueOf(1), brand, categories);
+        Article article = new Article(1L, "name", "description", BigDecimal.valueOf(10), Long.valueOf(1), brand, categories, "image-path");
 
         when(articlePersistencePort.findArticleByName(article.getName()))
                 .thenReturn(Optional.of(article));
 
+        MockMultipartFile mockFile = new MockMultipartFile(
+                "image",
+                "test.jpg",
+                "image/jpeg",
+                "fake-image-content".getBytes()
+        );
+
         assertThrows(ArticleAlreadyExistsException.class, () -> {
-            articleUseCase.saveArticle(article);
+            articleUseCase.saveArticle(article, mockFile);
         });
     }
 
@@ -184,7 +252,7 @@ public class ArticleUseCaseTests {
         Brand brand = new Brand(1L, "name", "description");
         List<Category> categories = new ArrayList<>();
         Pagination<Article> pagination = new Pagination<>(
-                Collections.singletonList(new Article(1L, "articleName", BigDecimal.ONE, Long.decode("1"), brand, categories )),
+                Collections.singletonList(new Article(1L, "articleName", "description", BigDecimal.ONE, Long.decode("1"), brand, categories, "image-path" )),
                 0,
                 10,
                 1,
@@ -211,7 +279,7 @@ public class ArticleUseCaseTests {
         List<Category> categories = new ArrayList<>();
         categories.add(category);
 
-        Article article = new Article(1L, "name", BigDecimal.ONE, Long.decode("1"), brand, categories );
+        Article article = new Article(1L, "name", "description", BigDecimal.ONE,  Long.decode("1"), brand, categories, "image-path" );
         article.setCategories(categories);
 
         when(articlePersistencePort.findArticleById(1L)).thenReturn(Optional.of(article));
@@ -232,7 +300,7 @@ public class ArticleUseCaseTests {
         List<Category> categories = new ArrayList<>();
         categories.add(category);
 
-        Article article = new Article(1L, "name", BigDecimal.ONE, Long.decode("1"), brand, categories );
+        Article article = new Article(1L, "name", "description", BigDecimal.ONE, Long.decode("1"), brand, categories, "image-path" );
         article.setCategories(categories);
 
         Supply supply = new Supply(1L, 10L);
@@ -251,7 +319,7 @@ public class ArticleUseCaseTests {
         List<Category> categories = new ArrayList<>();
         categories.add(category);
 
-        Article article = new Article(1L, "name", BigDecimal.ONE, Long.decode("1"), brand, categories );
+        Article article = new Article(1L, "name", "description", BigDecimal.ONE, Long.decode("1"), brand, categories, "image-path" );
         article.setCategories(categories);
 
         when(articlePersistencePort.findArticleById(1L)).thenReturn(Optional.of(article));

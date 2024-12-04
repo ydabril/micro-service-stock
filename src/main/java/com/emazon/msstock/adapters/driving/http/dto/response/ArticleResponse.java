@@ -14,4 +14,5 @@ public class ArticleResponse {
     private Integer quantity;
     private BrandResponse brand;
     private List<CategoryResponse> categories;
+    private String imagePath;
 }
